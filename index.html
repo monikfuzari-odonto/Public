@@ -1,0 +1,4129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1120">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Monik Fit">
+  <title>Monik Fit — Treino &amp; Nutrição (Atualizado Out/2026)</title>
+
+  <!-- CSS 100% Embutido e Autossuficiente (funciona offline na academia sem CDN externo) -->
+  <style>
+    :root {
+      --bg: #0b1120;
+      --bg-deep: #080d19;
+      --card: #131c31;
+      --card-elev: #1b2742;
+      --border: #23304d;
+      --border-soft: rgba(148, 163, 184, 0.16);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --rose: #f43f5e;
+      --rose-light: #fb7185;
+      --rose-soft: rgba(244, 63, 94, 0.15);
+      --rose-border: rgba(244, 63, 94, 0.42);
+
+      --emerald: #10b981;
+      --emerald-soft: rgba(16, 185, 129, 0.15);
+      --emerald-border: rgba(16, 185, 129, 0.42);
+
+      --amber: #f59e0b;
+      --amber-soft: rgba(245, 158, 11, 0.14);
+      --amber-border: rgba(245, 158, 11, 0.42);
+
+      --cyan: #38bdf8;
+      --cyan-soft: rgba(56, 189, 248, 0.14);
+      --cyan-border: rgba(56, 189, 248, 0.42);
+
+      --red: #ef4444;
+      --red-soft: rgba(239, 68, 68, 0.16);
+
+      --radius-xl: 18px;
+      --radius-lg: 14px;
+      --radius-md: 11px;
+      --shadow-card: 0 8px 24px -6px rgba(0, 0, 0, 0.48);
+      --shadow-rose: 0 8px 22px -4px rgba(244, 63, 94, 0.36);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: contain;
+      line-height: 1.45;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 92px;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      transition: transform 0.12s ease, background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    button:disabled {
+      opacity: 0.36;
+      pointer-events: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .anim-in {
+      animation: fadeUp 0.2s ease-out forwards;
+    }
+
+    /* ==================== HEADER ==================== */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(11, 17, 32, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--rose), var(--rose-light));
+      color: #fff;
+      font-weight: 900;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(244, 63, 94, 0.38);
+      flex-shrink: 0;
+      letter-spacing: 0.4px;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-title-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--emerald);
+      flex-shrink: 0;
+    }
+
+    .sync-dot.saving {
+      background: var(--amber);
+    }
+
+    .brand-sub {
+      margin: 1px 0 0;
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .btn-top {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 800;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .btn-top.hip {
+      color: #fcd34d;
+      border-color: var(--amber-border);
+      background: rgba(245, 158, 11, 0.11);
+    }
+
+    .btn-top.save {
+      color: #7dd3fc;
+      border-color: var(--cyan-border);
+      background: rgba(56, 189, 248, 0.11);
+    }
+
+    .desktop-nav {
+      display: none;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 4px;
+      border-radius: 13px;
+      gap: 4px;
+      margin-left: 4px;
+    }
+
+    .desktop-nav button {
+      min-height: 38px;
+      padding: 7px 13px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--text-muted);
+    }
+
+    .desktop-nav button.active {
+      background: linear-gradient(135deg, var(--rose), var(--rose-light));
+      color: #fff;
+    }
+
+    /* ==================== MAIN ==================== */
+    .main-wrap {
+      flex: 1;
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 14px 12px 24px;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .stack-sm {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    /* ==================== SURFACES ==================== */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 15px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .card-elev {
+      background: var(--card-elev);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+    }
+
+    .card-dark {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px;
+    }
+
+    .hero-card {
+      background: linear-gradient(145deg, #16213a 0%, #131c31 58%, rgba(244, 63, 94, 0.18) 100%);
+      border: 1px solid var(--rose-border);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .cyan-card {
+      background: linear-gradient(145deg, #131c31 0%, rgba(56, 189, 248, 0.14) 100%);
+      border: 1px solid var(--cyan-border);
+      border-radius: var(--radius-xl);
+      padding: 15px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .clinical-banner {
+      background: linear-gradient(145deg, rgba(245, 158, 11, 0.1) 0%, #131c31 100%);
+      border: 1px solid var(--amber-border);
+      border-radius: var(--radius-xl);
+      padding: 14px;
+    }
+
+    /* ==================== TYPOGRAPHY & BADGES ==================== */
+    .sec-label {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    .h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.25;
+    }
+
+    .h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .badge-rose {
+      background: var(--rose-soft);
+      color: #fda4af;
+      border: 1px solid var(--rose-border);
+    }
+
+    .badge-emerald {
+      background: var(--emerald-soft);
+      color: #6ee7b7;
+      border: 1px solid var(--emerald-border);
+    }
+
+    .badge-amber {
+      background: var(--amber-soft);
+      color: #fcd34d;
+      border: 1px solid var(--amber-border);
+    }
+
+    .badge-cyan {
+      background: var(--cyan-soft);
+      color: #7dd3fc;
+      border: 1px solid var(--cyan-border);
+    }
+
+    .badge-red {
+      background: var(--red-soft);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.42);
+    }
+
+    /* ==================== BUTTONS (MIN 44PX TOUCH TARGETS) ==================== */
+    .btn-primary {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 900;
+      color: #fff;
+      background: linear-gradient(135deg, var(--rose), var(--rose-light));
+      box-shadow: var(--shadow-rose);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-emerald {
+      width: 100%;
+      min-height: 44px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 900;
+      color: #052e1c;
+      background: var(--emerald);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .btn-cyan {
+      width: 100%;
+      min-height: 44px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 900;
+      color: #082f49;
+      background: var(--cyan);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .btn-secondary {
+      min-height: 44px;
+      padding: 9px 13px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--card-elev);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-outline-emerald {
+      min-height: 44px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #6ee7b7;
+      background: var(--bg);
+      border: 1px solid var(--emerald-border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-outline-rose {
+      min-height: 44px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fda4af;
+      background: var(--bg);
+      border: 1px solid var(--rose-border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-outline-cyan {
+      min-height: 44px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #7dd3fc;
+      background: var(--bg);
+      border: 1px solid var(--cyan-border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ==================== LAYOUT HELPERS ==================== */
+    .row-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .row-start {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .flex-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .grid-2-fixed {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 9px;
+    }
+
+    .grid-5 {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    /* ==================== HIP PROTOCOL BANNER ==================== */
+    .hip-banner {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid var(--amber-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .hip-banner-head {
+      width: 100%;
+      min-height: 46px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      text-align: left;
+      color: #fcd34d;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .hip-banner-body {
+      padding: 10px 14px 12px;
+      border-top: 1px solid rgba(245, 158, 11, 0.24);
+      font-size: 12px;
+      color: #fef3c7;
+      line-height: 1.5;
+    }
+
+    .hip-banner-body ul {
+      margin: 4px 0 0;
+      padding-left: 18px;
+    }
+
+    .hip-banner-body li {
+      margin-bottom: 4px;
+    }
+
+    /* ==================== WORKOUT SELECTOR A-E ==================== */
+    .w-pill {
+      position: relative;
+      min-height: 70px;
+      padding: 9px 3px;
+      border-radius: 13px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .w-pill.selected {
+      border-color: var(--rose);
+      background: rgba(244, 63, 94, 0.14);
+    }
+
+    .w-pill .w-letter {
+      font-size: 17px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .w-pill.selected .w-letter {
+      color: #fda4af;
+    }
+
+    .w-pill .w-name {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 3px;
+    }
+
+    .w-pill .w-date {
+      font-size: 9px;
+      color: var(--text-dim);
+      font-weight: 700;
+    }
+
+    .w-pill .rec-dot {
+      position: absolute;
+      top: -5px;
+      right: 5px;
+      width: 11px;
+      height: 11px;
+      border-radius: 99px;
+      background: var(--emerald);
+      border: 2px solid var(--bg);
+    }
+
+    /* ==================== EXERCISE CARDS & SUBSTITUTES ==================== */
+    .ex-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ex-card.is-sub {
+      border-color: var(--emerald-border);
+    }
+
+    .ex-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--card-elev);
+      color: #fda4af;
+      font-size: 12px;
+      font-weight: 900;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sub-strip {
+      padding-top: 9px;
+      border-top: 1px solid var(--border-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .chip {
+      min-height: 38px;
+      padding: 7px 11px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: var(--card);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chip.active-base {
+      background: var(--rose-soft);
+      color: #fecdd3;
+      border-color: var(--rose);
+    }
+
+    .chip.active-sub {
+      background: var(--emerald-soft);
+      color: #a7f3d0;
+      border-color: var(--emerald);
+    }
+
+    .hip-alert-box {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid var(--amber-border);
+      border-radius: 11px;
+      padding: 9px 11px;
+      font-size: 12px;
+      color: #fef3c7;
+      line-height: 1.45;
+    }
+
+    /* ==================== VIDEO THUMBNAIL (ZERO ERRO 153) ==================== */
+    .video-thumb-wrap {
+      position: relative;
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1b2742 0%, #0b1120 62%, #3a1223 100%);
+      border: 1px solid var(--border);
+    }
+
+    .video-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      display: block;
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11, 17, 32, 0.92), rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.14));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+      gap: 10px;
+    }
+
+    .play-circle {
+      width: 58px;
+      height: 58px;
+      border-radius: 999px;
+      background: #e11d48;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 26px rgba(225, 29, 72, 0.55);
+      border: 3px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .video-caption {
+      background: rgba(11, 17, 32, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .video-iframe-box {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #000;
+    }
+
+    .video-iframe-box iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* ==================== MUSCLE SVG BOX ==================== */
+    .guide-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .muscle-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    /* ==================== GUIDED WORKOUT ==================== */
+    .sticky-session {
+      position: sticky;
+      top: 63px;
+      z-index: 20;
+      background: rgba(19, 28, 49, 0.96);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--rose-border);
+      border-radius: var(--radius-xl);
+      padding: 13px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.52);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--rose), var(--emerald));
+      transition: width 0.35s ease;
+    }
+
+    .progress-fill.cyan-only {
+      background: linear-gradient(90deg, #0284c7, var(--cyan));
+    }
+
+    .progress-fill.emerald-only {
+      background: linear-gradient(90deg, #059669, var(--emerald));
+    }
+
+    .set-row {
+      display: grid;
+      grid-template-columns: 36px 1fr 1fr 48px;
+      gap: 6px;
+      align-items: center;
+      padding: 8px 7px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+
+    .set-row.done {
+      background: rgba(16, 185, 129, 0.14);
+      border-color: var(--emerald-border);
+    }
+
+    .set-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: var(--card-elev);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .set-row.done .set-badge {
+      background: var(--emerald);
+      color: #052e1c;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .step-btn {
+      width: 34px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--card-elev);
+      color: #fff;
+      font-size: 17px;
+      font-weight: 900;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-input {
+      width: 100%;
+      min-width: 34px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      text-align: center;
+      outline: none;
+    }
+
+    .step-input:focus {
+      border-color: var(--rose);
+    }
+
+    .check-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--card-elev);
+      border: 2px solid var(--border);
+      color: var(--text-dim);
+      font-size: 18px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .set-row.done .check-btn {
+      background: var(--emerald);
+      border-color: #6ee7b7;
+      color: #052e1c;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+
+    .jump-pill {
+      min-width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .jump-pill.active {
+      background: var(--rose);
+      border-color: #fda4af;
+      color: #fff;
+    }
+
+    .jump-pill.done {
+      background: var(--emerald-soft);
+      border-color: var(--emerald);
+      color: #6ee7b7;
+    }
+
+    /* ==================== INPUTS ==================== */
+    .field-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .input-box {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: #fff;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .input-box:focus {
+      border-color: var(--rose);
+    }
+
+    /* ==================== DIET, HYDRATION & STEPS ==================== */
+    .mode-card {
+      text-align: left;
+      padding: 14px;
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      border: 2px solid var(--border);
+      width: 100%;
+    }
+
+    .mode-card.active {
+      border-color: var(--rose);
+      background: rgba(244, 63, 94, 0.12);
+    }
+
+    .cup-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .cup-btn {
+      min-height: 46px;
+      padding: 6px 4px;
+      border-radius: 11px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-dim);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    .cup-btn.filled {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: var(--cyan);
+      color: #bae6fd;
+    }
+
+    .sched-pill {
+      min-height: 38px;
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .sched-pill.checked {
+      background: var(--cyan-soft);
+      border-color: var(--cyan);
+      color: #bae6fd;
+    }
+
+    /* ==================== FLOATING TIMER ==================== */
+    .float-timer {
+      position: fixed;
+      left: 12px;
+      right: 12px;
+      bottom: 84px;
+      z-index: 40;
+      pointer-events: none;
+    }
+
+    .float-timer-inner {
+      pointer-events: auto;
+      max-width: 400px;
+      margin: 0 auto;
+      background: rgba(19, 28, 49, 0.97);
+      backdrop-filter: blur(12px);
+      border: 2px solid var(--emerald);
+      border-radius: 16px;
+      padding: 11px 13px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.65);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .float-timer-inner.plank-mode {
+      border-color: var(--rose);
+    }
+
+    /* ==================== BOTTOM NAV (MOBILE) ==================== */
+    .mobile-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 30;
+      background: rgba(11, 17, 32, 0.96);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .mobile-nav-inner {
+      max-width: 520px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .mobile-nav button {
+      min-height: 52px;
+      padding: 7px 6px;
+      border-radius: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+    }
+
+    .mobile-nav button.active {
+      background: var(--rose-soft);
+      border-color: var(--rose-border);
+      color: #fda4af;
+    }
+
+    /* ==================== MODAL / BOTTOM SHEET ==================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .modal-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 22px 22px 0 0;
+      width: 100%;
+      max-width: 540px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.72);
+      animation: fadeUp 0.18s ease-out;
+    }
+
+    .modal-head {
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .modal-body {
+      padding: 15px 16px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-foot {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+      background: rgba(11, 17, 32, 0.65);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* ==================== TOASTS ==================== */
+    .toast-wrap {
+      position: fixed;
+      top: 68px;
+      right: 12px;
+      left: 12px;
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 7px;
+      pointer-events: none;
+    }
+
+    .toast {
+      pointer-events: auto;
+      max-width: 340px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+      animation: fadeUp 0.18s ease-out;
+    }
+
+    .toast.success { background: #047857; border: 1px solid #34d399; }
+    .toast.info    { background: #1e293b; border: 1px solid #475569; }
+    .toast.error   { background: #be123c; border: 1px solid #fb7185; }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (min-width: 640px) {
+      body { padding-bottom: 32px; }
+      .desktop-nav { display: flex; }
+      .mobile-nav { display: none; }
+      .grid-2 { grid-template-columns: repeat(2, 1fr); }
+      .grid-4 { grid-template-columns: repeat(4, 1fr); }
+      .guide-grid { flex-direction: row; align-items: flex-start; }
+      .muscle-box { width: 176px; }
+      .modal-backdrop { align-items: center; padding: 16px; }
+      .modal-panel { border-radius: 20px; }
+      .float-timer { left: auto; right: 24px; bottom: 24px; width: 370px; }
+      .cup-grid { grid-template-columns: repeat(10, 1fr); }
+    }
+  </style>
+  <!-- App da Tela de Início (iPhone) -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="stylesheet" href="ios.css">
+  <!-- Ajustes de iPhone: offline, som do descanso/prancha, exportar arquivos, dica de instalação -->
+  <script src="ios.js"></script>
+</head>
+<body>
+
+  <!-- Barra Superior Compacta -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="avatar">MF</div>
+        <div class="brand-text">
+          <div class="brand-title-row">
+            <h1 class="brand-title">Monik Fit</h1>
+            <span id="syncDot" class="sync-dot" title="Salvo automaticamente no aparelho"></span>
+          </div>
+          <p class="brand-sub">100% Máquinas • Out/2026</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" id="btnTopHip" class="btn-top hip" title="Protocolo de Proteção ao Quadril Esquerdo">
+          <span>🛡️</span><span>Quadril</span>
+        </button>
+        <button type="button" id="btnTopSave" class="btn-top save" title="Salvar como App no Celular">
+          <span>📱</span><span>Salvar</span>
+        </button>
+
+        <nav class="desktop-nav" aria-label="Navegação Principal">
+          <button type="button" data-tab="treino" class="nav-desk">🏋️ Treino</button>
+          <button type="button" data-tab="dieta" class="nav-desk">🥗 Dieta</button>
+          <button type="button" data-tab="evolucao" class="nav-desk">📊 Evolução</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Dinâmico -->
+  <main id="appRoot" class="main-wrap"></main>
+
+  <!-- Barra Flutuante de Cronômetro (Descanso / Prancha 35s) -->
+  <div id="floatTimer" class="float-timer hidden">
+    <div id="floatTimerBox" class="float-timer-inner">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div id="floatTimerIcon" style="width:42px;height:42px;border-radius:11px;background:rgba(16,185,129,0.18);border:1px solid rgba(16,185,129,0.45);display:flex;align-items:center;justify-content:center;font-size:18px;">⏱</div>
+        <div>
+          <div id="floatTimerLabel" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:#6ee7b7;">Descanso</div>
+          <div id="floatTimerDisplay" class="tabular" style="font-size:22px;font-weight:900;color:#fff;line-height:1.1;">00:45</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button type="button" id="btnTimerPlus15" class="btn-secondary" style="min-height:44px;padding:8px 11px;font-size:12px;">+15s</button>
+        <button type="button" id="btnTimerStop" class="btn-emerald" style="width:auto;min-height:44px;padding:8px 14px;font-size:12px;">Pronto</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navegação Inferior Fixa (Mobile) -->
+  <nav class="mobile-nav" aria-label="Navegação Mobile">
+    <div class="mobile-nav-inner">
+      <button type="button" data-tab="treino" class="nav-mob">
+        <span style="font-size:18px;line-height:1;">🏋️</span>
+        <span>Treino</span>
+      </button>
+      <button type="button" data-tab="dieta" class="nav-mob">
+        <span style="font-size:18px;line-height:1;">🥗</span>
+        <span>Dieta</span>
+      </button>
+      <button type="button" data-tab="evolucao" class="nav-mob">
+        <span style="font-size:18px;line-height:1;">📊</span>
+        <span>Evolução</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Modal / Bottom-Sheet Reutilizável -->
+  <div id="appModal" class="modal-backdrop hidden">
+    <div class="modal-panel">
+      <div class="modal-head">
+        <h3 id="modalTitle" class="h3">Título</h3>
+        <button type="button" id="modalCloseX" class="btn-secondary" style="width:44px;height:44px;padding:0;border-radius:11px;">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div id="modalFooter" class="modal-foot">
+        <button type="button" id="modalCancelBtn" class="btn-secondary">Fechar</button>
+        <button type="button" id="modalConfirmBtn" class="btn-primary" style="width:auto;min-height:44px;padding:10px 18px;font-size:12.5px;">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input oculto para importar Backup JSON -->
+  <input type="file" id="importJsonInput" accept=".json,application/json" class="hidden" />
+
+  <!-- Container de Toasts -->
+  <div id="toastWrap" class="toast-wrap"></div>
+
+  <script>
+    /**
+     * ============================================================================
+     * MONIK FIT — TREINO & NUTRIÇÃO (ATUALIZADO OUT/2026)
+     * Perfil: Monik Fuzari | 41 anos | 167 cm | 73,95 kg | 37,5% GC | Água 46,1%
+     * Exames atualizados: 23/10/2026 (Laboratório Clementino Fraga)
+     * 100% Máquinas & Polias • Proteção Quadril Esq. • Offline-Ready
+     * ============================================================================
+     */
+
+    const STORAGE_KEY = 'monik_fit_v1_state';
+    const WORKOUT_ORDER = ['A', 'B', 'C', 'D', 'E'];
+
+    const MUSCLE_LABELS = {
+      peito: 'Peitoral',
+      costas: 'Dorsais / Costas',
+      ombros: 'Ombros',
+      ombro_post: 'Ombro Posterior',
+      trapezio: 'Trapézio',
+      biceps: 'Bíceps',
+      triceps: 'Tríceps',
+      antebraco: 'Antebraço',
+      core: 'Core / Abdômen',
+      quadriceps: 'Quadríceps',
+      posteriores: 'Posteriores',
+      gluteos: 'Glúteos',
+      gluteo_medio: 'Glúteo Médio',
+      adutores: 'Adutores',
+      panturrilha: 'Panturrilha'
+    };
+
+    // ==================== 5 TREINOS (ROTAÇÃO LIVRE A -> E) ====================
+    const WORKOUTS = {
+      A: {
+        id: 'A',
+        name: 'Treino A',
+        shortFocus: 'Empurrar',
+        focus: 'Superiores Empurrar — Peito, Ombros & Tríceps',
+        estMin: 26,
+        warmup: '2 min: 2 séries leves no Supino Reto Máquina com 50% da carga (10–12 reps controladas).',
+        exercises: [
+          {
+            id: 'A1',
+            name: 'Supino Reto Máquina Articulada',
+            shortName: 'Supino Articulado',
+            sets: 3, repMin: 10, repMax: 12, repLabel: '10–12', restSec: 60,
+            videoId: '0eUtNqAXegc',
+            primary: ['peito'],
+            secondary: ['triceps', 'ombros'],
+            tip: 'Ajuste o banco com as manoplas na linha média do peito e escápulas encaixadas no apoio.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Supino Placas', shortName: 'Supino Placas', videoId: 'RILogqbMVzQ', note: 'Mesma mecânica horizontal com troca rápida de pino.' },
+              { name: 'Supino Reto Smith', shortName: 'Supino Smith', videoId: 'vGqxqSs37_g', note: 'Barra guiada estável com controle total do trajeto.' }
+            ]
+          },
+          {
+            id: 'A2',
+            name: 'Desenvolvimento Máquina',
+            shortName: 'Desenv. Máquina',
+            sets: 3, repMin: 10, repMax: 12, repLabel: '10–12', restSec: 60,
+            videoId: 'uh0oZorifmM',
+            primary: ['ombros'],
+            secondary: ['triceps'],
+            tip: 'Lombar apoiada no encosto, empurre de forma controlada sem travar os cotovelos no topo.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Elevação Lateral Polia', shortName: 'Elev. Lat. Polia', videoId: 'sKPJdvVvHuI', note: 'Tensão constante no cabo focando deltoide lateral.' },
+              { name: 'Supino Inclinado Máquina', shortName: 'Sup. Inclinado', videoId: 'KNuTH1LRq0Y', note: 'Recruta deltoide anterior e peitoral superior com conforto.' }
+            ]
+          },
+          {
+            id: 'A3',
+            name: 'Crucifixo Máquina / Peck Deck',
+            shortName: 'Peck Deck',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 50,
+            videoId: '9BEQWr0u-ac',
+            primary: ['peito'],
+            secondary: ['ombros'],
+            tip: 'Cotovelos levemente flexionados, feche contraindo por 1s e controle a abertura em 2s.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Crossover Polia Alta', shortName: 'Crossover Polia', videoId: '_hdQD_E3deE', note: 'Adução horizontal com resistência contínua no cabo.' },
+              { name: 'Supino Inclinado Máquina', shortName: 'Sup. Inclinado', videoId: 'KK5ZSj22h7s', note: 'Alternativa rápida em máquina guiada.' }
+            ]
+          },
+          {
+            id: 'A4',
+            name: 'Tríceps Corda na Polia Alta',
+            shortName: 'Tríceps Corda',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 45,
+            videoId: 'VnFopAIGO7E',
+            primary: ['triceps'],
+            secondary: ['antebraco'],
+            tip: 'Cotovelos colados às costelas, estenda abrindo levemente a corda no final.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Tríceps Barra Reta Polia', shortName: 'Barra Reta', videoId: 'M88Bt4MMpkI', note: 'Pegada firme na barra reta mantendo punhos neutros.' },
+              { name: 'Tríceps Testa Polia Corda', shortName: 'Testa Polia', videoId: 'cIqScmVpqnc', note: 'Ótimo alongamento da cabeça longa na própria polia.' }
+            ]
+          }
+        ]
+      },
+
+      B: {
+        id: 'B',
+        name: 'Treino B',
+        shortFocus: 'Pernas I',
+        focus: 'Inferiores Quadríceps & Estabilidade — Proteção Quadril Esq.',
+        estMin: 27,
+        warmup: '2 min: 1 série leve de 15 reps na Cadeira Abdutora + mobilidade suave de tornozelo e quadril sem dor.',
+        exercises: [
+          {
+            id: 'B1',
+            name: 'Leg Press Horizontal Máquina',
+            shortName: 'Leg Horizontal',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: 'FkdLVrcPMZY',
+            primary: ['quadriceps'],
+            secondary: ['gluteos'],
+            tip: 'Pés na largura dos ombros, cadência 2-1-2, sem travar joelhos na extensão.',
+            hipAlert: 'Pés levemente mais altos na plataforma; descer só até 90° sem descolar a lombar nem pinçar o quadril esquerdo.',
+            substitutes: [
+              { name: 'Leg Press 45° Amplitude Segura', shortName: 'Leg 45° Seguro', videoId: 'DQ4-HXFlKXI', note: 'Amplitude limitada a ≤90° com lombar totalmente fixa no banco.' },
+              { name: 'Agachamento Smith Banco de Referência', shortName: 'Smith c/ Banco', videoId: '7p_qycgzx4U', note: 'Use um banco atrás para limitar a descida exatamente em 90°.' }
+            ]
+          },
+          {
+            id: 'B2',
+            name: 'Cadeira Extensora',
+            shortName: 'Cad. Extensora',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 50,
+            videoId: 'el3oHblB5DM',
+            primary: ['quadriceps'],
+            secondary: ['core'],
+            tip: 'Alinhe o joelho ao eixo da máquina, suba controlando e segure 1s no topo.',
+            hipAlert: 'Super segura para o quadril esquerdo — zero flexão dinâmica do quadril.',
+            substitutes: [
+              { name: 'Agachamento Hack Amplitude Curta', shortName: 'Hack Curto', videoId: 'x0waoZh8pnk', note: 'Costas apoiadas e descida curta sem compressão na virilha.' },
+              { name: 'Leg Press Horizontal Unilateral Leve', shortName: 'Leg Unilateral', videoId: 'F8m05d2upOA', note: 'Comece sempre pela perna esquerda ditando amplitude confortável.' }
+            ]
+          },
+          {
+            id: 'B3',
+            name: 'Cadeira Abdutora — Tronco Ereto',
+            shortName: 'Cad. Abdutora',
+            sets: 3, repMin: 15, repMax: 15, repLabel: '15', restSec: 45,
+            videoId: 'f_bdEC-njpg',
+            primary: ['gluteo_medio', 'gluteos'],
+            secondary: ['core'],
+            tip: 'Tronco ereto apoiado, abra devagar segurando 1s e retorne sem bater placas.',
+            hipAlert: 'Fortalece o glúteo médio e estabiliza diretamente o quadril esquerdo.',
+            substitutes: [
+              { name: 'Glúteo Máquina Extensão', shortName: 'Glúteo Máquina', videoId: '2aEx45AyMYs', note: 'Extensão guiada iniciando pela perna esquerda.' },
+              { name: 'Elevação Pélvica Máquina', shortName: 'Elev. Pélvica', videoId: 'pyttaKPHvo0', note: 'Subida controlada até alinhar o tronco sem hiperextender lombar.' }
+            ]
+          },
+          {
+            id: 'B4',
+            name: 'Panturrilha Sentada na Máquina',
+            shortName: 'Pant. Sentada',
+            sets: 3, repMin: 15, repMax: 15, repLabel: '15', restSec: 45,
+            videoId: '6eJ9EVwazXk',
+            primary: ['panturrilha'],
+            secondary: ['core'],
+            tip: 'Pausa real de 1s alongando embaixo e 1s contraindo no topo.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Panturrilha em Pé Máquina', shortName: 'Pant. em Pé', videoId: 'EILF4iyBxSQ', note: 'Joelhos quase estendidos com controle total na descida.' },
+              { name: 'Panturrilha no Leg Horizontal', shortName: 'Pant. Leg Horiz.', videoId: 'F8m05d2upOA', note: 'Apoie a ponta dos pés na base com costas apoiadas.' }
+            ]
+          }
+        ]
+      },
+
+      C: {
+        id: 'C',
+        name: 'Treino C',
+        shortFocus: 'Puxar',
+        focus: 'Superiores Puxar — Costas, Postura & Bíceps',
+        estMin: 26,
+        warmup: '2 min: 2 séries leves na Puxada Frontal (12 reps com foco em deprimir os ombros).',
+        exercises: [
+          {
+            id: 'C1',
+            name: 'Puxada Frontal Aberta na Polia',
+            shortName: 'Puxada Aberta',
+            sets: 3, repMin: 10, repMax: 12, repLabel: '10–12', restSec: 60,
+            videoId: '_2MfZAj98tk',
+            primary: ['costas'],
+            secondary: ['biceps'],
+            tip: 'Peito aberto, puxe a barra em direção ao peitoral superior sem balançar o tronco.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Puxada Triângulo Neutra', shortName: 'Puxada Triângulo', videoId: 'MNUxv5ewhFg', note: 'Pegada neutra muito confortável para ombros e coluna.' },
+              { name: 'Pullover Polia Corda', shortName: 'Pullover Polia', videoId: '3-HByhIzcgA', note: 'Isolamento eficiente de dorsais na polia alta.' }
+            ]
+          },
+          {
+            id: 'C2',
+            name: 'Remada Máquina Articulada Neutra',
+            shortName: 'Remada Neutra',
+            sets: 3, repMin: 10, repMax: 12, repLabel: '10–12', restSec: 60,
+            videoId: 'Sq7rWvJtzDY',
+            primary: ['costas'],
+            secondary: ['biceps', 'ombro_post'],
+            tip: 'Peito firme no apoio protegendo lombar e quadril; puxe fechando as escápulas.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Remada Baixa Triângulo Polia', shortName: 'Remada Baixa', videoId: 'Ai8CjE7szJU', note: 'Coluna ereta, puxe em direção ao umbigo sem balançar quadril.' },
+              { name: 'Puxada Triângulo Neutra', shortName: 'Puxada Triângulo', videoId: 'ySLFHxmJ_Sc', note: 'Substituta rápida na polia alta.' }
+            ]
+          },
+          {
+            id: 'C3',
+            name: 'Crucifixo Inverso Máquina / Peck Deck',
+            shortName: 'Crucif. Inverso',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 50,
+            videoId: 'wUT3hmnzq3c',
+            primary: ['ombro_post', 'costas'],
+            secondary: ['trapezio'],
+            tip: 'Excelente para postura do consultório; abra os braços com ombros baixos e controle.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Face Pull Polia Corda', shortName: 'Face Pull', videoId: 'Wec9Bp6_2P4', note: 'Puxe a corda à testa abrindo os cotovelos e rotacionando ombros.' },
+              { name: 'Remada Articulada Aberta', shortName: 'Remada Aberta', videoId: '14GcffFimi0', note: 'Foco na parte superior das costas com peito apoiado.' }
+            ]
+          },
+          {
+            id: 'C4',
+            name: 'Rosca Scott Máquina',
+            shortName: 'Rosca Scott',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 45,
+            videoId: 'WH6IgVJeK68',
+            primary: ['biceps'],
+            secondary: ['antebraco'],
+            tip: 'Axilas bem encaixadas, controle a descida em 2s sem levantar os ombros.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Rosca Direta Polia Baixa', shortName: 'Rosca Polia', videoId: 'x6JCKfdzPJE', note: 'Tensão constante no cabo mantendo cotovelos fixos.' },
+              { name: 'Rosca Martelo Polia Corda', shortName: 'Martelo Corda', videoId: 'cUXEYaGjB-c', note: 'Pegada neutra confortável para punhos e antebraços.' }
+            ]
+          }
+        ]
+      },
+
+      D: {
+        id: 'D',
+        name: 'Treino D',
+        shortFocus: 'Pernas II',
+        focus: 'Inferiores Posteriores, Glúteos & Core — Proteção Quadril Esq.',
+        estMin: 27,
+        warmup: '2 min: 1 série leve na Cadeira Flexora (12 reps) + ativação suave de glúteos sem dor.',
+        exercises: [
+          {
+            id: 'D1',
+            name: 'Cadeira Flexora',
+            shortName: 'Cad. Flexora',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: 'Zss6E3VU6X0',
+            primary: ['posteriores'],
+            secondary: ['panturrilha'],
+            tip: 'Trava firme sobre as coxas, puxe controlando com 1s de pausa embaixo.',
+            hipAlert: 'Segura para quadril e lombar — mantenha a pelve estável no encosto.',
+            substitutes: [
+              { name: 'Mesa Flexora', shortName: 'Mesa Flexora', videoId: '2-ULaRrQa7c', note: 'Pressione o quadril contra o banco sem arquear a lombar.' },
+              { name: 'Elevação Pélvica Máquina', shortName: 'Elev. Pélvica', videoId: 'wQnOtytUy0c', note: 'Ótima opção focada em glúteo e posterior.' }
+            ]
+          },
+          {
+            id: 'D2',
+            name: 'Elevação Pélvica na Máquina',
+            shortName: 'Elev. Pélvica',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 60,
+            videoId: 'pyttaKPHvo0',
+            primary: ['gluteos'],
+            secondary: ['posteriores', 'core'],
+            tip: 'Joelhos a ~90° no topo, queixo apontando à frente e 1s de contração nos glúteos.',
+            hipAlert: 'Suba apenas até alinhar o tronco sem hiperestender a lombar; pare se houver fisgada anterior no quadril esquerdo.',
+            substitutes: [
+              { name: 'Glúteo Máquina Extensão Quadril', shortName: 'Glúteo Máquina', videoId: '2aEx45AyMYs', note: 'Sem pressão de cinto/almofada na frente do quadril.' },
+              { name: 'Glúteo Coice na Polia', shortName: 'Coice Polia', videoId: 'XYCCcD0MxN8', note: 'Comece pela perna esquerda em amplitude confortável.' }
+            ]
+          },
+          {
+            id: 'D3',
+            name: 'Cadeira Adutora — Amplitude Confortável',
+            shortName: 'Cad. Adutora',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 45,
+            videoId: 'C3tldrEVnjI',
+            primary: ['adutores'],
+            secondary: ['core'],
+            tip: 'Regule o pino de abertura em posição confortável e feche com movimento suave.',
+            hipAlert: 'Parar sempre antes de qualquer incômodo ou estiramento na virilha esquerda.',
+            substitutes: [
+              { name: 'Cadeira Abdutora', shortName: 'Cad. Abdutora', videoId: 'GljAOyT5xLI', note: 'Troca imediata caso a adutora gere qualquer incômodo na virilha.' },
+              { name: 'Cadeira Extensora', shortName: 'Cad. Extensora', videoId: 'y7GhuVphn4s', note: 'Alternativa 100% livre de desconforto na virilha/quadril.' }
+            ]
+          },
+          {
+            id: 'D4',
+            name: 'Prancha Isométrica no Colchonete',
+            shortName: 'Prancha 35s',
+            sets: 3, repMin: 35, repMax: 35, repLabel: '35s', restSec: 45,
+            isometria: true,
+            isoDefaultSec: 35,
+            videoId: 'ffHr8a6DRvU',
+            primary: ['core'],
+            secondary: ['gluteos', 'ombros'],
+            tip: 'Antebraços sob os ombros, abdômen e glúteos ativos mantendo linha reta.',
+            hipAlert: 'Estabiliza core e pelve sem flexão repetitiva do quadril — use o cronômetro de 35s no card!',
+            substitutes: [
+              { name: 'Abdominal Máquina', shortName: 'Abd. Máquina', videoId: 'YSKWgY_47L4', isometria: false, repMin: 12, repMax: 15, note: 'Amplitude curta focando apenas na flexão do tronco.' },
+              { name: 'Abdominal Supra Polia Corda', shortName: 'Abd. Polia', videoId: 'zp6uK1aE1Lc', isometria: false, repMin: 12, repMax: 15, note: 'Enrole apenas o tronco mantendo quadril estável.' }
+            ]
+          }
+        ]
+      },
+
+      E: {
+        id: 'E',
+        name: 'Treino E',
+        shortFocus: 'Equilíbrio',
+        focus: 'Metabólico & Equilíbrio — Full Upper + Braços',
+        estMin: 26,
+        warmup: '2 min: 1 série leve no Supino Inclinado + 1 série leve na Puxada Triângulo.',
+        exercises: [
+          {
+            id: 'E1',
+            name: 'Supino Inclinado Máquina Articulada',
+            shortName: 'Sup. Inclinado',
+            sets: 3, repMin: 10, repMax: 12, repLabel: '10–12', restSec: 55,
+            videoId: 'KNuTH1LRq0Y',
+            primary: ['peito'],
+            secondary: ['ombros', 'triceps'],
+            tip: 'Escápulas firmes, desça em 2s e empurre sem desencostar ombros do banco.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Supino Reto Máquina', shortName: 'Supino Reto', videoId: '0eUtNqAXegc', note: 'Substituto direto em máquina articulada.' },
+              { name: 'Crossover Polia Alta', shortName: 'Crossover Polia', videoId: 'jqTlJt3JXzQ', note: 'Excelente opção na polia caso as máquinas estejam ocupadas.' }
+            ]
+          },
+          {
+            id: 'E2',
+            name: 'Puxada Triângulo Neutra na Polia',
+            shortName: 'Puxada Triângulo',
+            sets: 3, repMin: 10, repMax: 12, repLabel: '10–12', restSec: 55,
+            videoId: 'MNUxv5ewhFg',
+            primary: ['costas'],
+            secondary: ['biceps'],
+            tip: 'Puxe o triângulo ao centro do peito mantendo peito aberto e ombros baixos.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Remada Baixa Triângulo', shortName: 'Remada Baixa', videoId: '3kqjkP7kqVM', note: 'Puxada horizontal na polia mantendo postura ereta.' },
+              { name: 'Remada Máquina Fechada', shortName: 'Remada Máquina', videoId: '6fIh5HJ1gDg', note: 'Peito apoiado zerando fadiga lombar.' }
+            ]
+          },
+          {
+            id: 'E3',
+            name: 'Elevação Lateral na Polia Baixa',
+            shortName: 'Elev. Lat. Polia',
+            sets: 3, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 45,
+            videoId: 'sKPJdvVvHuI',
+            primary: ['ombros'],
+            secondary: ['trapezio'],
+            tip: 'Eleve o braço até a linha do ombro pensando em afastar a mão, sem encolher trapézio.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Desenvolvimento Máquina', shortName: 'Desenv. Máquina', videoId: 'VFbijwqdsTU', note: 'Empurrada guiada vertical para ombros.' },
+              { name: 'Face Pull Polia', shortName: 'Face Pull', videoId: 'f0UsHyBHhuU', note: 'Foco postural e deltoide posterior.' }
+            ]
+          },
+          {
+            id: 'E4',
+            name: 'Tríceps Francês Polia Corda',
+            shortName: 'Francês Polia',
+            sets: 2, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 45,
+            videoId: 'IoawExktILM',
+            primary: ['triceps'],
+            secondary: ['core'],
+            tip: 'Execute alternado/sequencial com o #5; estenda acima da cabeça sem abrir cotovelos.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Tríceps Corda Polia Alta', shortName: 'Tríceps Corda', videoId: 'VnFopAIGO7E', note: 'Extensão para baixo com cotovelos fixos ao tronco.' },
+              { name: 'Tríceps Barra Reta Polia', shortName: 'Barra Reta', videoId: 'M88Bt4MMpkI', note: 'Execução firme e rápida na polia alta.' }
+            ]
+          },
+          {
+            id: 'E5',
+            name: 'Rosca Direta Polia Baixa',
+            shortName: 'Rosca Polia',
+            sets: 2, repMin: 12, repMax: 15, repLabel: '12–15', restSec: 45,
+            videoId: 'x6JCKfdzPJE',
+            primary: ['biceps'],
+            secondary: ['antebraco'],
+            tip: 'Finalize os braços com cotovelos fixos ao lado do corpo e descida controlada.',
+            hipAlert: null,
+            substitutes: [
+              { name: 'Rosca Scott Máquina', shortName: 'Rosca Scott', videoId: 'WH6IgVJeK68', note: 'Apoio total dos braços evitando qualquer balanço.' },
+              { name: 'Rosca Martelo Polia Corda', shortName: 'Martelo Corda', videoId: 'cUXEYaGjB-c', note: 'Pegada neutra confortável na corda.' }
+            ]
+          }
+        ]
+      }
+    };
+
+    const ALL_EXERCISES = WORKOUT_ORDER.flatMap(wId =>
+      WORKOUTS[wId].exercises.map(ex => ({ ...ex, workoutId: wId, workoutName: WORKOUTS[wId].name }))
+    );
+
+    // ==================== DIETA (ATUALIZADA OUT/2026: FERRITINA 221, COL 210, B12 1041) ====================
+    const DIET_MODES = {
+      recomp: {
+        id: 'recomp',
+        title: 'Recomposição Corporal',
+        badge: 'Recomendado',
+        desc: 'Déficit moderado com alta proteína de comida de verdade, foco em carnes brancas/peixes, fibras solúveis ≥32g/dia e zero suplementos.',
+        kcal: 1620, p: 125, c: 158, g: 52, fiber: '≥32g'
+      },
+      maint: {
+        id: 'maint',
+        title: 'Manutenção / Hipertrofia Gradual',
+        badge: 'Mais Energia & Força',
+        desc: 'Aporte próximo à manutenção para priorizar evolução nas cargas mantendo o protocolo para Ferritina 221, Colesterol 210 e B12 1.041.',
+        kcal: 1850, p: 130, c: 198, g: 58, fiber: '≥35g'
+      }
+    };
+
+    const WATER_SCHEDULE = [
+      { id: 'w0430', label: '04:30 Acordar (260 ml)' },
+      { id: 'w0530', label: '05:30 Treino (520 ml)' },
+      { id: 'w0830', label: '08:30 Manhã (520 ml)' },
+      { id: 'w1130', label: '11:30 Pré-Almoço (260 ml)' },
+      { id: 'w1430', label: '14:30 Tarde (520 ml)' },
+      { id: 'w1730', label: '17:30 Fim Tarde (260 ml)' },
+      { id: 'w1930', label: '19:30 Último copo (260 ml)' }
+    ];
+
+    const MEALS = [
+      {
+        id: 'meal_1',
+        num: 1,
+        time: '04:45 / 06:00',
+        title: 'Pré-Treino Leve + Café da Manhã Proteico',
+        kcal: { recomp: 420, maint: 475 },
+        note: '☕ Dica clínica (Ferritina 221): o café preto sem açúcar ajuda inclusive a moderar a absorção intestinal de ferro quando tomado perto das refeições.',
+        items: [
+          {
+            id: 'm1_prot',
+            tag: 'Proteína (Ovos / Lácteo)',
+            base: {
+              recomp: '2 ovos mexidos + 2 claras (ou 1 pote iogurte natural desnatado + 2 ovos)',
+              maint:  '2 ovos mexidos + 2 claras (ou 1 pote iogurte natural desnatado + 2 ovos)'
+            },
+            subs: [
+              { short: 'Iogurte + Cottage', text: 'Iogurte grego light/natural (150g) + queijo cottage (60g)' },
+              { short: 'Omelete 3 Ovos', text: 'Omelete de 3 ovos com espinafre e ervas' },
+              { short: 'Frango Desfiado', text: 'Frango desfiado (80g pronto) na tapioca ou pão integral' }
+            ]
+          },
+          {
+            id: 'm1_carb',
+            tag: 'Carbo + Fibra Solúvel (Anti-Colesterol)',
+            diff: true,
+            base: {
+              recomp: '35g Aveia em flocos + 1 col. sopa (10g) Chia ou Linhaça dourada',
+              maint:  '45g Aveia em flocos + 1 col. sopa (10g) Chia ou Linhaça dourada ⬆'
+            },
+            subs: [
+              { short: 'Pão Integral + Chia', text: '2 fatias pão 100% integral + 1 col. sopa chia' },
+              { short: 'Cuscuz + Chia', text: 'Cuscuz cozido (80g Recomp. / 115g Manut.) + 1 col. sopa chia' },
+              { short: 'Tapioca + Linhaça', text: 'Tapioca (45g Recomp. / 65g Manut.) + 1 col. sopa linhaça dourada' }
+            ]
+          },
+          {
+            id: 'm1_fruit',
+            tag: 'Fruta (Pré-treino ou Café)',
+            base: {
+              recomp: '1 Banana prata ou 1 Maçã com casca (ou ½ Mamão papaia)',
+              maint:  '1 Banana prata ou 1 Maçã com casca (ou ½ Mamão papaia)'
+            },
+            subs: [
+              { short: 'Pera c/ Casca', text: '1 Pera média com casca (rica em fibra solúvel)' },
+              { short: 'Morango / Kiwi', text: '150g Morangos ou 2 Kiwis frescos' },
+              { short: 'Mamão Papaia', text: '½ Mamão papaia com aveia/chia' }
+            ]
+          },
+          {
+            id: 'm1_coffee',
+            tag: 'Bebida (Modera Absorção de Ferro)',
+            base: {
+              recomp: 'Café preto sem açúcar (100–150 ml)',
+              maint:  'Café preto sem açúcar (100–150 ml)'
+            },
+            subs: [
+              { short: 'Chá Verde/Preto', text: 'Chá verde ou chá preto sem açúcar (polifenóis moderam ferro)' },
+              { short: 'Café c/ Leite Desn.', text: 'Café com 100 ml leite desnatado sem açúcar' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'meal_2',
+        num: 2,
+        time: '12:00',
+        title: 'Almoço (Foco Peixe/Frango & Fibras Solúveis)',
+        kcal: { recomp: 495, maint: 575 },
+        note: '🩸 Ferritina 221: priorize carnes brancas e peixes; se optar por carne vermelha (máx. 1–2x/sem), evite suco de laranja/acerola junto.',
+        items: [
+          {
+            id: 'm2_prot',
+            tag: 'Proteína Branca / Peixe (Padrão Ferritina & Colesterol)',
+            base: {
+              recomp: '140g Filé de tilápia, pescada ou peito de frango grelhado',
+              maint:  '150g Filé de tilápia, pescada ou peito de frango grelhado ⬆'
+            },
+            subs: [
+              { short: 'Sardinha / Salmão', text: '140g Sardinha ou Salmão assado (ômega-3 natural p/ HDL)' },
+              { short: 'Frango Desfiado', text: '140g (150g Manut.) Peito de frango desfiado ou em cubos' },
+              { short: 'Ovos + Cottage', text: '3 ovos cozidos + 50g queijo cottage' },
+              { short: '⚠️ Patinho (1-2x/sem)', text: '⚠️ Opcional máx. 1–2x/sem: 120g Patinho magro (NÃO combinar c/ suco cítrico)' }
+            ]
+          },
+          {
+            id: 'm2_carb',
+            tag: 'Carboidrato Base',
+            diff: true,
+            base: {
+              recomp: '110g Arroz integral ou parboilizado cozido',
+              maint:  '150g Arroz integral ou parboilizado cozido ⬆'
+            },
+            subs: [
+              { short: 'Batata Cozida', text: '140g (185g Manut.) Batata doce ou inglesa cozida/assada' },
+              { short: 'Macaxeira / Inhame', text: '120g (160g Manut.) Macaxeira ou inhame cozido' },
+              { short: 'Macarrão Integral', text: '100g (135g Manut.) Macarrão integral cozido' }
+            ]
+          },
+          {
+            id: 'm2_leg',
+            tag: 'Leguminosa (Fibras Solúveis p/ LDL)',
+            diff: true,
+            base: {
+              recomp: '80g Feijão carioca ou preto cozido (1 concha média)',
+              maint:  '100g Feijão carioca ou preto cozido ⬆'
+            },
+            subs: [
+              { short: 'Grão-de-bico', text: '80g (100g Manut.) Grão-de-bico cozido' },
+              { short: 'Lentilha', text: '80g (100g Manut.) Lentilha cozida' },
+              { short: 'Arroz + Chia', text: '+40g arroz integral + 1 col. sopa chia (no lugar do feijão)' }
+            ]
+          },
+          {
+            id: 'm2_veg',
+            tag: 'Vegetais + Gordura Boa',
+            base: {
+              recomp: 'Salada crua/refogada livre (alface, rúcula, tomate, brócolis, abobrinha) + 1 col. sopa (10 ml) Azeite extravirgem',
+              maint:  'Salada crua/refogada livre (alface, rúcula, tomate, brócolis, abobrinha) + 1 col. sopa (10 ml) Azeite extravirgem'
+            },
+            subs: [
+              { short: 'Legumes + Azeite', text: 'Legumes assados no forno/airfryer + 10 ml azeite extravirgem' },
+              { short: 'Salada + Abacate', text: 'Salada variada + 50g abacate (no lugar do azeite)' },
+              { short: 'Folhas + Castanhas', text: 'Mix de folhas verdes + 15g castanhas ou nozes sem sal' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'meal_3',
+        num: 3,
+        time: '15:30',
+        title: 'Lanche da Tarde (Fibras & Saciedade)',
+        kcal: { recomp: 315, maint: 360 },
+        items: [
+          {
+            id: 'm3_prot',
+            tag: 'Proteína Prática',
+            base: {
+              recomp: '170g Iogurte natural (desnatado ou integral) + 1 fatia (30g) queijo minas frescal (ou 2 ovos cozidos)',
+              maint:  '170g Iogurte natural (desnatado ou integral) + 1 fatia (30g) queijo minas frescal (ou 2 ovos cozidos)'
+            },
+            subs: [
+              { short: 'Frango c/ Tomate', text: '100g Frango desfiado temperado com tomate e orégano' },
+              { short: 'Atum em Água', text: '1 lata (120g drenado) Atum sólido em água' },
+              { short: 'Ricota + 2 Ovos', text: '30g Ricota/Cottage + 2 ovos cozidos' }
+            ]
+          },
+          {
+            id: 'm3_carb',
+            tag: 'Carbo + Fibra (Redução de LDL)',
+            diff: true,
+            base: {
+              recomp: '1 Maçã/Pera com casca + 20g Aveia ou Granola s/ açúcar + 1 col. chá Psyllium/Chia',
+              maint:  '1 Maçã/Pera com casca + 30g Aveia ou Granola s/ açúcar + 1 col. chá Psyllium/Chia ⬆'
+            },
+            subs: [
+              { short: 'Pão Integral + Homus', text: '1 fatia pão 100% integral + 2 col. sopa pasta de grão-de-bico (homus)' },
+              { short: 'Banana + Aveia', text: '1 Banana prata + 20g (30g Manut.) aveia + canela' },
+              { short: 'Cuscuz + Chia', text: '40g (60g Manut.) Cuscuz cozido + 1 col. chá chia' }
+            ]
+          },
+          {
+            id: 'm3_fat',
+            tag: 'Gordura Boa (Suporte ao HDL)',
+            base: {
+              recomp: '15g Castanha-do-pará/caju ou amêndoas sem sal',
+              maint:  '15g Castanha-do-pará/caju ou amêndoas sem sal'
+            },
+            subs: [
+              { short: 'Pasta Amendoim', text: '1 col. sopa (15g) Pasta de amendoim integral sem açúcar' },
+              { short: 'Abacate', text: '50g Abacate fresco' },
+              { short: 'Semente Abóbora', text: '15g Semente de abóbora torrada sem sal' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'meal_4',
+        num: 4,
+        time: '19:00',
+        title: 'Jantar Leve (1h30 antes de dormir às 20:30)',
+        kcal: { recomp: 390, maint: 440 },
+        items: [
+          {
+            id: 'm4_prot',
+            tag: 'Proteína Branca',
+            diff: true,
+            base: {
+              recomp: '130g Peito de frango grelhado/desfiado ou filé de peixe',
+              maint:  '145g Peito de frango grelhado/desfiado ou filé de peixe ⬆'
+            },
+            subs: [
+              { short: 'Omelete Legumes', text: 'Omelete de 2 ovos + 2 claras com legumes picados' },
+              { short: 'Atum / Sardinha', text: '120g Atum em água ou Sardinha assada (ômega-3)' },
+              { short: 'Tofu Grelhado', text: '150g Tofu grelhado com ervas e cúrcuma (proteína vegetal)' },
+              { short: '⚠️ Carne Magra (Ocas.)', text: '⚠️ Ocasional (máx. 1–2x/sem): 110g Carne bovina magra moída' }
+            ]
+          },
+          {
+            id: 'm4_carb',
+            tag: 'Carboidrato Leve',
+            diff: true,
+            base: {
+              recomp: '110g Batata inglesa/doce assada ou abóbora cabotiá',
+              maint:  '150g Batata inglesa/doce assada ou abóbora cabotiá ⬆'
+            },
+            subs: [
+              { short: 'Arroz Integral', text: '90g (125g Manut.) Arroz integral ou parboilizado cozido' },
+              { short: 'Sanduíche Integral', text: '2 fatias pão 100% integral (sanduíche natural)' },
+              { short: 'Mandioca / Aipim', text: '120g (155g Manut.) Mandioca/aipim cozido' },
+              { short: 'Caldo de Legumes', text: 'Caldo cremoso de legumes (abóbora/inhame) com frango desfiado' }
+            ]
+          },
+          {
+            id: 'm4_veg',
+            tag: 'Vegetais + Gordura Boa',
+            base: {
+              recomp: 'Legumes variados (brócolis, cenoura, chuchu, abobrinha) + 1 col. chá (5 ml) Azeite extravirgem',
+              maint:  'Legumes variados (brócolis, cenoura, chuchu, abobrinha) + 1 col. chá (5 ml) Azeite extravirgem'
+            },
+            subs: [
+              { short: 'Salada Verde', text: 'Salada verde completa + 5 ml azeite extravirgem' },
+              { short: 'Sopa Abóbora', text: 'Sopa/creme leve de abóbora com gengibre + fio de azeite' },
+              { short: 'Couve-flor / Vagem', text: 'Couve-flor e vagem refogados no alho e 5 ml azeite' }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // ==================== PAINEL CLÍNICO ATUALIZADO (23/10/2026 — CLEMENTINO FRAGA) ====================
+    const LAB_RESULTS_OUT2026 = [
+      { name: 'Ferritina Sérica', val: '221 ng/mL', ref: '5 a 205 ng/mL', status: 'atencao', badge: 'Atenção', note: 'Acima do teto — priorizar carnes brancas/peixes, zero suplemento de ferro; avaliar IST e PCR com médico.' },
+      { name: 'Vitamina B12', val: '1.041 pg/mL', ref: '187 a 883 pg/mL', status: 'atencao', badge: 'Atenção', note: 'Acima do teto — manter ZERO polivitamínicos ou suplementos com B12 sem orientação médica.' },
+      { name: 'Colesterol Total', val: '210 mg/dL', ref: '< 190 mg/dL', status: 'atencao', badge: 'Atenção', note: 'Evolução: 189 (2023) → 195 (2024) → 202 (abr/26) → 210 (out/26). Foco: fibras ≥32g/dia e peixes.' },
+      { name: 'LDL Estimado', val: '~140 mg/dL', ref: 'Fórmula Friedewald', status: 'atencao', badge: 'Atenção', note: 'Solicitar dosagem direta de LDL no próximo retorno; responderá bem a fibras solúveis e menos saturadas.' },
+      { name: 'Colesterol HDL', val: '60 mg/dL', ref: '> 40 mg/dL', status: 'bom', badge: 'Bom', note: 'Protetor acima da meta, mas caiu de 71 (2024). Meta de 6.000–7.500 passos/dia ajuda a elevar.' },
+      { name: 'Triglicerídeos', val: '51 mg/dL', ref: '< 150 mg/dL', status: 'otimo', badge: 'Ótimo', note: 'Excelente controle (era 42 em 2023 e 44 em 2024).' },
+      { name: 'Vitamina D (25-OH)', val: '51,9 ng/mL', ref: '20 a 60 ng/mL', status: 'otimo', badge: 'Ótimo', note: 'Grande evolução: subiu de 26,7 ng/mL (ago/2024) para faixa excelente!' },
+      { name: 'Glicose em Jejum', val: '86 mg/dL', ref: '70 a 99 mg/dL', status: 'otimo', badge: 'Ótimo', note: 'Estável e saudável (82 em 2023 → 85 em 2024 → 86 em out/26).' },
+      { name: 'Hemoglobina Glicada (A1c)', val: '4,8%', ref: '4,0 a 5,6%', status: 'otimo', badge: 'Ótimo', note: 'eGM 91,1 mg/dL — melhorou frente aos 5,0% de ago/2024.' },
+      { name: 'Fígado (GGT · TGO · TGP)', val: '11 · 14 · 10 U/L', ref: '<38 · <35 · <35', status: 'otimo', badge: 'Ótimo', note: 'Perfil hepático impecável.' },
+      { name: 'Hemograma Completo', val: 'Hb 13,2 · Hem 4,3', ref: '3,9–5,3 · 12–16', status: 'normal', badge: 'Normal', note: 'TOTALMENTE NORMALIZADO! Hct 38,6%, HCM 31 pg (normalizou!), VCM 90,6 fL, Leuc 5.660, Plaq 271k.' },
+      { name: 'Magnésio', val: '1,9 mg/dL', ref: '1,6 a 2,6 mg/dL', status: 'normal', badge: 'Normal', note: 'Dentro da faixa ideal para função muscular e sono.' },
+      { name: 'Função Renal (Creat. / eTFG)', val: '0,86 · 87 mL/min', ref: '0,66–1,09 · CKD-EPI', status: 'normal', badge: 'Normal', note: 'Evolução Creat: 0,65 → 0,77 → 0,71 → 0,86. G2 sem critério p/ DRC; reforça hidratação de 2,6 L/dia.' },
+      { name: 'Tireoide (Último: 30/04/2026)', val: 'TSH 2,56 · T4 8,3', ref: 'T3 0,90 ng/mL', status: 'normal', badge: 'Normal', note: 'Função tireoidiana normal no último painel.' }
+    ];
+
+    // ==================== ESTADO & PERSISTÊNCIA SEGURA ====================
+    function createInitialState() {
+      return {
+        version: 2,
+        updatedAt: Date.now(),
+        activeTab: 'treino',
+        selectedWorkoutId: 'A',
+        hipBannerCollapsed: false,
+        dietMode: 'recomp',
+        mealSubs: {},
+        preferredExVariant: {},
+        dailyLogs: {},
+        workoutHistory: [],
+        activeSession: null,
+        bodyLogs: [
+          {
+            id: 'body_init_monik',
+            date: '2026-11-22',
+            weight: 73.95,
+            bf: 37.5,
+            muscleKg: 24.8,
+            waterPct: 46.1,
+            note: 'Bioimpedância atual (IMC 26,5 · Visceral 8,0 · BMR 1.380 kcal)'
+          }
+        ]
+      };
+    }
+
+    let state = createInitialState();
+
+    const ui = {
+      openGuideId: null,
+      inlineEmbedKey: null,
+      guidedViewAll: false,
+      expandedHistId: null,
+      chartExId: 'B1',
+      sessionTickInterval: null,
+      timerSec: 0,
+      timerInterval: null,
+      modalConfirmCb: null
+    };
+
+    function mergeStateSafely(raw) {
+      const base = createInitialState();
+      if (!raw || typeof raw !== 'object') return base;
+      const merged = {
+        ...base,
+        ...raw,
+        version: 2,
+        mealSubs: { ...base.mealSubs, ...(raw.mealSubs || {}) },
+        preferredExVariant: { ...base.preferredExVariant, ...(raw.preferredExVariant || {}) },
+        dailyLogs: { ...base.dailyLogs, ...(raw.dailyLogs || {}) },
+        workoutHistory: Array.isArray(raw.workoutHistory) ? raw.workoutHistory : [],
+        bodyLogs: Array.isArray(raw.bodyLogs) && raw.bodyLogs.length ? raw.bodyLogs : base.bodyLogs
+      };
+      if (!WORKOUTS[merged.selectedWorkoutId]) merged.selectedWorkoutId = 'A';
+      if (!DIET_MODES[merged.dietMode]) merged.dietMode = 'recomp';
+      return merged;
+    }
+
+    function loadState() {
+      try {
+        const str = localStorage.getItem(STORAGE_KEY);
+        if (str) state = mergeStateSafely(JSON.parse(str));
+      } catch (err) {
+        console.warn('Falha ao ler localStorage:', err);
+        state = createInitialState();
+      }
+    }
+
+    function persistState() {
+      state.updatedAt = Date.now();
+      const dot = document.getElementById('syncDot');
+      if (dot) dot.classList.add('saving');
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (err) {
+        console.warn('Falha ao salvar localStorage:', err);
+      }
+      setTimeout(() => { if (dot) dot.classList.remove('saving'); }, 220);
+    }
+
+    // ==================== UTILITÁRIOS ====================
+    function getTodayKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    function formatShortDate(isoOrYmd) {
+      if (!isoOrYmd) return '--/--';
+      const p = String(isoOrYmd).slice(0, 10).split('-');
+      return p.length === 3 ? `${p[2]}/${p[1]}/${p[0].slice(2)}` : String(isoOrYmd);
+    }
+
+    function formatShortDateTime(iso) {
+      if (!iso) return '--';
+      const d = new Date(iso);
+      if (isNaN(d.getTime())) return formatShortDate(iso);
+      return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')} às ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    }
+
+    function formatMMSS(sec) {
+      const s = Math.max(0, Math.floor(Number(sec) || 0));
+      return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function playChime(isPlank = false) {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        const freqs = isPlank ? [523.25, 659.25, 783.99] : [587.33, 880];
+        freqs.forEach((f, idx) => {
+          const osc = ctx.createOscillator();
+          const g = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, now + idx * 0.15);
+          g.gain.setValueAtTime(0.13, now + idx * 0.15);
+          g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.15 + 0.14);
+          osc.connect(g);
+          g.connect(ctx.destination);
+          osc.start(now + idx * 0.15);
+          osc.stop(now + idx * 0.15 + 0.15);
+        });
+      } catch (e) {}
+      if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+        try { navigator.vibrate(isPlank ? [140, 70, 140, 70, 140] : [110, 70, 110]); } catch (e) {}
+      }
+    }
+
+    function showToast(msg, type = 'success') {
+      const wrap = document.getElementById('toastWrap');
+      if (!wrap) return;
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.textContent = msg;
+      wrap.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.25s ease';
+        setTimeout(() => el.remove(), 260);
+      }, 2800);
+    }
+
+    function openModal({ title, bodyHtml, confirmText = 'Confirmar', cancelText = 'Fechar', hideConfirm = false, onConfirm = null }) {
+      const m = document.getElementById('appModal');
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = bodyHtml;
+      const cBtn = document.getElementById('modalConfirmBtn');
+      const xBtn = document.getElementById('modalCancelBtn');
+      cBtn.textContent = confirmText;
+      xBtn.textContent = cancelText;
+      cBtn.classList.toggle('hidden', Boolean(hideConfirm));
+      ui.modalConfirmCb = onConfirm;
+      m.classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('appModal').classList.add('hidden');
+      ui.modalConfirmCb = null;
+    }
+
+    // ==================== CRONÔMETROS ====================
+    function startFloatTimer(seconds, mode = 'rest') {
+      stopFloatTimer();
+      ui.timerSec = Math.max(5, Number(seconds) || 45);
+      const bar = document.getElementById('floatTimer');
+      const box = document.getElementById('floatTimerBox');
+      const lbl = document.getElementById('floatTimerLabel');
+      const disp = document.getElementById('floatTimerDisplay');
+      const icon = document.getElementById('floatTimerIcon');
+      const isPlank = mode === 'plank';
+
+      if (box) box.classList.toggle('plank-mode', isPlank);
+      if (lbl) {
+        lbl.textContent = isPlank ? 'Prancha Isométrica' : 'Descanso';
+        lbl.style.color = isPlank ? '#fda4af' : '#6ee7b7';
+      }
+      if (icon) icon.textContent = isPlank ? '🧘‍♀️' : '⏱';
+      if (disp) disp.textContent = formatMMSS(ui.timerSec);
+      if (bar) bar.classList.remove('hidden');
+
+      ui.timerInterval = setInterval(() => {
+        ui.timerSec--;
+        if (disp) disp.textContent = formatMMSS(ui.timerSec);
+        if (ui.timerSec <= 0) {
+          stopFloatTimer();
+          playChime(isPlank);
+          showToast(isPlank ? '✨ Prancha de 35s concluída! Excelente core!' : '⏱ Descanso concluído! Próxima série!', 'success');
+        }
+      }, 1000);
+    }
+
+    function stopFloatTimer() {
+      clearInterval(ui.timerInterval);
+      ui.timerInterval = null;
+      ui.timerSec = 0;
+      const bar = document.getElementById('floatTimer');
+      if (bar) bar.classList.add('hidden');
+    }
+
+    function getSessionElapsedSec(s = state.activeSession) {
+      if (!s) return 0;
+      const base = Number(s.accumulatedSec) || 0;
+      if (!s.running || !s.resumedAt) return base;
+      return base + Math.max(0, Math.floor((Date.now() - s.resumedAt) / 1000));
+    }
+
+    function ensureSessionTicker() {
+      clearInterval(ui.sessionTickInterval);
+      if (!state.activeSession || !state.activeSession.running) return;
+      ui.sessionTickInterval = setInterval(() => {
+        if (!state.activeSession || !state.activeSession.running) {
+          clearInterval(ui.sessionTickInterval);
+          return;
+        }
+        const elapsed = getSessionElapsedSec(state.activeSession);
+        const tEl = document.getElementById('sessionTimerDisplay');
+        const bEl = document.getElementById('sessionTimeBar');
+        if (tEl) tEl.textContent = formatMMSS(elapsed);
+        if (bEl) bEl.style.width = `${Math.min(100, Math.round((elapsed / 1800) * 100))}%`;
+      }, 1000);
+    }
+
+    // ==================== LÓGICA DE TREINO & PROGRESSÃO ====================
+    function getRecommendedWorkoutId() {
+      if (!state.workoutHistory.length) return 'A';
+      const idx = WORKOUT_ORDER.indexOf(state.workoutHistory[0].workoutId);
+      return idx === -1 ? 'A' : WORKOUT_ORDER[(idx + 1) % WORKOUT_ORDER.length];
+    }
+
+    function getLastSessionForWorkout(wId) {
+      return state.workoutHistory.find(s => s.workoutId === wId) || null;
+    }
+
+    function getExerciseVariants(ex) {
+      const list = [{
+        name: ex.name,
+        shortName: ex.shortName || ex.name,
+        videoId: ex.videoId,
+        note: ex.tip,
+        isometria: Boolean(ex.isometria),
+        repMin: ex.repMin,
+        repMax: ex.repMax,
+        repLabel: ex.repLabel,
+        isPrincipal: true
+      }];
+      (ex.substitutes || []).forEach(sub => {
+        const isIso = typeof sub.isometria === 'boolean' ? sub.isometria : Boolean(ex.isometria);
+        const rMin = sub.repMin || ex.repMin;
+        const rMax = sub.repMax || ex.repMax;
+        list.push({
+          name: sub.name,
+          shortName: sub.shortName || sub.name,
+          videoId: sub.videoId || ex.videoId,
+          note: sub.note || ex.tip,
+          isometria: isIso,
+          repMin: rMin,
+          repMax: rMax,
+          repLabel: isIso ? `${rMin}s` : (rMin === rMax ? `${rMax}` : `${rMin}–${rMax}`),
+          isPrincipal: false
+        });
+      });
+      return list;
+    }
+
+    function getActiveExerciseOption(ex, variantIdx = 0) {
+      const list = getExerciseVariants(ex);
+      const safe = (typeof variantIdx === 'number' && variantIdx >= 0 && variantIdx < list.length) ? variantIdx : 0;
+      return { ...list[safe], index: safe };
+    }
+
+    function getLastRecordForExercise(exId, exactName = null) {
+      if (exactName) {
+        for (const sess of state.workoutHistory) {
+          const f = (sess.exercises || []).find(e => e.exId === exId && e.executedName === exactName && e.sets.some(st => st.done));
+          if (f) return { date: sess.completedAt, hipStatus: sess.hipStatus, isometria: Boolean(f.isometria), executedName: f.executedName, sets: f.sets.filter(st => st.done) };
+        }
+      }
+      for (const sess of state.workoutHistory) {
+        const f = (sess.exercises || []).find(e => e.exId === exId && e.sets.some(st => st.done));
+        if (f) return { date: sess.completedAt, hipStatus: sess.hipStatus, isometria: Boolean(f.isometria), executedName: f.executedName, sets: f.sets.filter(st => st.done) };
+      }
+      return null;
+    }
+
+    function getProgressionTip(ex, opt, lastRec) {
+      if (opt.isometria) {
+        return !lastRec
+          ? { type: 'init', label: '🛡️ Estreia Core', text: 'Segure 35s em linha reta com glúteos e abdômen firmes, sem dor no quadril.' }
+          : { type: 'keep', label: '✨ Controle Postural', text: 'Mantenha 35s limpos com respiração calma e zero queda de lombar.' };
+      }
+      if (!lastRec) {
+        return { type: 'init', label: '🛡️ Estreia Segura', text: `Use carga moderada p/ ${opt.repLabel} reps (cadência 2-1-2), deixando 2–3 reps na reserva (RIR 2–3).` };
+      }
+      const hadPain = lastRec.hipStatus === 'discomfort';
+      const hitTop = lastRec.sets.length >= ex.sets && lastRec.sets.every(st => Number(st.reps) >= opt.repMax);
+      const maxKg = Math.max(...lastRec.sets.map(st => Number(st.kg) || 0));
+      if (hitTop && maxKg > 0 && !hadPain) {
+        return { type: 'up', label: '⬆ Subir Levemente', text: `Fechou ${opt.repMax} reps sem dor! Suba +1 a +2,5 kg (ou +1 placa leve) e mire ${opt.repMin} reps limpas.` };
+      }
+      return { type: 'keep', label: '🎯 Consolidar', text: `Mantenha ${maxKg > 0 ? maxKg + ' kg' : 'a placa'} e busque +1 rep limpa sempre com RIR 2–3 e quadril confortável.` };
+    }
+
+    function getTodayDietLog() {
+      const k = getTodayKey();
+      if (!state.dailyLogs[k]) {
+        state.dailyLogs[k] = { waterMl: 0, waterSched: {}, mealsDone: {}, steps: 0 };
+      }
+      if (!state.dailyLogs[k].waterSched) state.dailyLogs[k].waterSched = {};
+      if (!state.dailyLogs[k].mealsDone) state.dailyLogs[k].mealsDone = {};
+      if (typeof state.dailyLogs[k].steps !== 'number') state.dailyLogs[k].steps = Number(state.dailyLogs[k].steps) || 0;
+      return state.dailyLogs[k];
+    }
+
+    // ==================== MAPA MUSCULAR ANATÔMICO SVG (CORAL FOCO / ÂMBAR AUXILIAR) ====================
+    function renderMuscleMapSVG(primary = [], secondary = []) {
+      const c = (keys) => {
+        const arr = Array.isArray(keys) ? keys : [keys];
+        if (arr.some(k => primary.includes(k))) return '#f43f5e';
+        if (arr.some(k => secondary.includes(k))) return '#f59e0b';
+        return '#1e293b';
+      };
+
+      return `
+        <div class="muscle-box">
+          <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+            <svg viewBox="0 0 100 185" width="66" height="114" aria-label="Vista Frontal">
+              <circle cx="50" cy="18" r="10" fill="#334155"/>
+              <ellipse cx="27" cy="40" rx="8" ry="7" fill="${c('ombros')}"/>
+              <ellipse cx="73" cy="40" rx="8" ry="7" fill="${c('ombros')}"/>
+              <path d="M33 35 Q50 32 67 35 L65 55 Q50 58 35 55 Z" fill="${c('peito')}"/>
+              <rect x="38" y="57" width="24" height="32" rx="6" fill="${c('core')}"/>
+              <rect x="18" y="47" width="10" height="28" rx="5" fill="${c('biceps')}"/>
+              <rect x="72" y="47" width="10" height="28" rx="5" fill="${c('biceps')}"/>
+              <rect x="15" y="77" width="8" height="24" rx="4" fill="${c('antebraco')}"/>
+              <rect x="77" y="77" width="8" height="24" rx="4" fill="${c('antebraco')}"/>
+              <path d="M35 92 L48 92 L46 138 L34 138 Z" fill="${c('quadriceps')}"/>
+              <path d="M52 92 L65 92 L66 138 L54 138 Z" fill="${c('quadriceps')}"/>
+              <path d="M46 95 L54 95 L52 126 L48 126 Z" fill="${c('adutores')}"/>
+              <rect x="35" y="141" width="10" height="34" rx="4" fill="#334155"/>
+              <rect x="55" y="141" width="10" height="34" rx="4" fill="#334155"/>
+            </svg>
+            <svg viewBox="0 0 100 185" width="66" height="114" aria-label="Vista Posterior">
+              <circle cx="50" cy="18" r="10" fill="#334155"/>
+              <path d="M36 29 L64 29 L58 38 L42 38 Z" fill="${c('trapezio')}"/>
+              <ellipse cx="27" cy="40" rx="8" ry="7" fill="${c(['ombro_post', 'ombros'])}"/>
+              <ellipse cx="73" cy="40" rx="8" ry="7" fill="${c(['ombro_post', 'ombros'])}"/>
+              <path d="M32 37 L68 37 L62 78 L38 78 Z" fill="${c('costas')}"/>
+              <rect x="18" y="47" width="10" height="28" rx="5" fill="${c('triceps')}"/>
+              <rect x="72" y="47" width="10" height="28" rx="5" fill="${c('triceps')}"/>
+              <rect x="15" y="77" width="8" height="24" rx="4" fill="${c('antebraco')}"/>
+              <rect x="77" y="77" width="8" height="24" rx="4" fill="${c('antebraco')}"/>
+              <ellipse cx="42" cy="92" rx="10" ry="11" fill="${c(['gluteos', 'gluteo_medio'])}"/>
+              <ellipse cx="58" cy="92" rx="10" ry="11" fill="${c(['gluteos', 'gluteo_medio'])}"/>
+              <rect x="34" y="105" width="13" height="34" rx="6" fill="${c('posteriores')}"/>
+              <rect x="53" y="105" width="13" height="34" rx="6" fill="${c('posteriores')}"/>
+              <ellipse cx="40" cy="156" rx="6.5" ry="15" fill="${c('panturrilha')}"/>
+              <ellipse cx="60" cy="156" rx="6.5" ry="15" fill="${c('panturrilha')}"/>
+            </svg>
+          </div>
+          <div style="display:flex;gap:12px;font-size:10px;font-weight:700;color:#94a3b8;">
+            <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:99px;background:#f43f5e;"></span>Foco</span>
+            <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:99px;background:#f59e0b;"></span>Auxiliar</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== VÍDEO YOUTUBE SEM ERRO 153 ====================
+    function renderVideoBlock(ex, opt) {
+      const ytId = opt.videoId;
+      const isHttp = window.location.protocol === 'http:' || window.location.protocol === 'https:';
+      const embedKey = `${ex.id}:${opt.index}`;
+      const showIframe = isHttp && ui.inlineEmbedKey === embedKey;
+
+      if (showIframe) {
+        return `
+          <div class="stack-sm">
+            <div class="video-iframe-box">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0"
+                title="Vídeo: ${escapeHtml(opt.name)}"
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+            </div>
+            <div class="row-between">
+              <button type="button" data-close-embed="1" class="btn-secondary" style="min-height:44px;font-size:11.5px;">← Voltar à capa</button>
+              <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" rel="noopener noreferrer" class="btn-outline-rose" style="min-height:44px;font-size:11.5px;">Abrir no YouTube ↗</a>
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="stack-sm">
+          <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" rel="noopener noreferrer" class="video-thumb-wrap">
+            <img src="https://i.ytimg.com/vi/${ytId}/hqdefault.jpg" alt="Demonstração: ${escapeHtml(opt.name)}" onerror="this.style.display='none'" />
+            <div class="video-overlay">
+              <div class="play-circle">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="margin-left:3px;"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+              <span class="video-caption">▶ Assistir no YouTube ↗</span>
+            </div>
+          </a>
+          ${isHttp ? `
+            <div style="display:flex;justify-content:flex-end;">
+              <button type="button" data-open-embed="${embedKey}" class="btn-outline-emerald" style="min-height:44px;font-size:11.5px;">🎬 Assistir aqui dentro</button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function renderExerciseGuide(ex, variantIdx) {
+      const opt = getActiveExerciseOption(ex, variantIdx);
+      const primLabels = ex.primary.map(k => MUSCLE_LABELS[k] || k);
+      const secLabels = ex.secondary.map(k => MUSCLE_LABELS[k] || k);
+
+      return `
+        <div class="card-dark anim-in stack-sm" style="border-color:#334155;">
+          ${renderVideoBlock(ex, opt)}
+          <div class="guide-grid">
+            ${renderMuscleMapSVG(ex.primary, ex.secondary)}
+            <div class="stack-sm" style="flex:1;min-width:0;">
+              <div class="flex-wrap">
+                ${primLabels.map(l => `<span class="badge badge-rose">${l}</span>`).join('')}
+                ${secLabels.map(l => `<span class="badge badge-amber">${l}</span>`).join('')}
+              </div>
+              ${ex.hipAlert ? `<div class="hip-alert-box"><strong>🛡️ Alerta Quadril Esquerdo:</strong> ${escapeHtml(ex.hipAlert)}</div>` : ''}
+              <div class="card-elev" style="font-size:12px;">
+                <strong style="color:#6ee7b7;">⚙️ Execução &amp; Regulagem:</strong>
+                <span style="color:#e2e8f0;">${escapeHtml(opt.note)}</span>
+              </div>
+              <div class="card-elev" style="font-size:11.5px;color:#cbd5e1;">
+                <strong style="color:#fcd34d;">⏱ Cadência 2-1-2 · RIR 2–3:</strong>
+                controle a descida em 2s, pause 1s e pare 2–3 repetições antes da falha.
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderInlineSubStrip(ex, activeIdx, mode, refKey) {
+      const variants = getExerciseVariants(ex);
+      return `
+        <div class="sub-strip">
+          <div class="row-between">
+            <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em;color:#94a3b8;">🔄 Substitutos em 1 toque:</span>
+            <button type="button" data-open-ex-sub="${mode}:${refKey}" style="min-height:36px;padding:4px 6px;font-size:11px;font-weight:800;color:#6ee7b7;">Ver detalhes</button>
+          </div>
+          <div class="flex-wrap">
+            ${variants.map((v, idx) => {
+              const sel = idx === activeIdx;
+              const cls = sel ? (idx === 0 ? 'chip active-base' : 'chip active-sub') : 'chip';
+              return `<button type="button" data-quick-ex-sub="${mode}:${refKey}:${idx}" class="${cls}">${sel ? '✓ ' : ''}${idx === 0 ? 'Padrão' : escapeHtml(v.shortName)}</button>`;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== ABA 1: TREINO ====================
+    function renderHipProtocolBanner() {
+      const c = Boolean(state.hipBannerCollapsed);
+      return `
+        <section class="hip-banner">
+          <button type="button" id="btnToggleHipBanner" class="hip-banner-head">
+            <span>🛡️ Protocolo Quadril Esquerdo &amp; Iniciante</span>
+            <span style="font-size:11px;">${c ? 'Mostrar ▼' : 'Recolher ▲'}</span>
+          </button>
+          ${!c ? `
+            <div class="hip-banner-body">
+              <ul>
+                <li><strong>Regra dos ≤ 90°:</strong> evite flexão profunda do quadril ou qualquer dor aguda/pinçamento na virilha esquerda.</li>
+                <li><strong>Cadência 2-1-2 &amp; RIR 2–3:</strong> controle a descida em 2s e pare sempre com 2–3 repetições na reserva (sem falha extrema).</li>
+                <li><strong>Troca imediata:</strong> sentiu incômodo? Toque em uma máquina substituta logo abaixo do exercício.</li>
+              </ul>
+            </div>
+          ` : ''}
+        </section>
+      `;
+    }
+
+    function renderTreinoTab() {
+      return state.activeSession ? renderGuidedSessionView() : renderLobbyView();
+    }
+
+    function renderLobbyView() {
+      const recId = getRecommendedWorkoutId();
+      const recW = WORKOUTS[recId];
+      const selW = WORKOUTS[state.selectedWorkoutId] || recW;
+      const lastOverall = state.workoutHistory[0] || null;
+      const lastSel = getLastSessionForWorkout(selW.id);
+
+      return `
+        <div class="stack anim-in">
+          ${renderHipProtocolBanner()}
+
+          <!-- Próximo Sugerido na Fila -->
+          <section class="hero-card stack-sm" style="gap:14px;">
+            <div class="row-start">
+              <div style="min-width:0;">
+                <span class="badge badge-rose">✨ Próximo Sugerido na Fila</span>
+                <h2 class="h2" style="margin-top:7px;">${recW.name} — ${recW.focus}</h2>
+                <p class="muted" style="margin:4px 0 0;">
+                  ${lastOverall
+                    ? `Último concluído: <strong style="color:#fff;">${lastOverall.workoutName}</strong> em ${formatShortDateTime(lastOverall.completedAt)}`
+                    : 'Rotação livre A → B → C → D → E sem dias da semana fixos.'}
+                </p>
+              </div>
+              <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#f43f5e,#fb7185);color:#fff;font-weight:900;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 6px 18px rgba(244,63,94,0.4);">
+                ${recId}
+              </div>
+            </div>
+
+            <button type="button" data-start-workout="${recId}" class="btn-primary">
+              <span>▶</span>
+              <span>Iniciar ${recW.name} Guiado (~${recW.estMin} min)</span>
+            </button>
+          </section>
+
+          <!-- Seletor Livre A-E -->
+          <section class="stack-sm">
+            <div class="row-between" style="padding:0 2px;">
+              <h3 class="sec-label">Escolher Treino (Sem Dia Fixo)</h3>
+              <span style="font-size:11px;color:#6ee7b7;font-weight:700;">100% Máquinas &amp; Polias</span>
+            </div>
+            <div class="grid-5">
+              ${WORKOUT_ORDER.map(id => {
+                const w = WORKOUTS[id];
+                const isSel = id === selW.id;
+                const isRec = id === recId;
+                const lw = getLastSessionForWorkout(id);
+                return `
+                  <button type="button" data-select-workout="${id}" class="w-pill ${isSel ? 'selected' : ''}">
+                    ${isRec ? '<span class="rec-dot" title="Próximo na fila"></span>' : ''}
+                    <span class="w-letter">${id}</span>
+                    <span class="w-name">${w.shortFocus}</span>
+                    <span class="w-date">${lw ? formatShortDate(lw.completedAt) : 'Novo'}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+          </section>
+
+          <!-- Exercícios do Treino Selecionado -->
+          <section class="card stack-sm" style="gap:12px;">
+            <div class="row-between" style="flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--border);">
+              <div>
+                <h3 class="h3">${selW.name} · ${selW.focus}</h3>
+                <p class="muted" style="margin:3px 0 0;">
+                  ${lastSel
+                    ? `Última execução: ${formatShortDateTime(lastSel.completedAt)} · ${formatMMSS(lastSel.durationSec)} · ${Number(lastSel.totalVolumeKg).toLocaleString('pt-BR')} kg`
+                    : 'Ainda sem execução salva para este treino.'}
+                </p>
+              </div>
+              ${selW.id !== recId ? `
+                <button type="button" data-start-workout="${selW.id}" class="btn-primary" style="width:auto;min-height:44px;padding:9px 15px;font-size:12px;">
+                  ▶ Iniciar ${selW.name}
+                </button>
+              ` : ''}
+            </div>
+
+            <div class="card-dark" style="border-color:var(--amber-border);font-size:12px;color:#e2e8f0;">
+              <strong style="color:#fcd34d;">🔥 Aquecimento:</strong> ${selW.warmup}
+            </div>
+
+            <div class="stack-sm" style="gap:11px;">
+              ${selW.exercises.map((ex, i) => {
+                const prefIdx = Number(state.preferredExVariant[ex.id]) || 0;
+                const opt = getActiveExerciseOption(ex, prefIdx);
+                const lastRec = getLastRecordForExercise(ex.id, opt.name);
+                const guideOpen = ui.openGuideId === ex.id;
+                const lastTxt = lastRec
+                  ? lastRec.sets.map(st => opt.isometria ? `${st.reps}s` : `${st.kg}kg×${st.reps}`).join(' · ')
+                  : 'Sem registro anterior';
+
+                return `
+                  <div class="ex-card ${prefIdx > 0 ? 'is-sub' : ''}">
+                    <div class="row-start">
+                      <div style="min-width:0;flex:1;">
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                          <span class="ex-num">${i + 1}</span>
+                          <span style="font-size:14px;font-weight:800;color:#fff;">${escapeHtml(opt.name)}</span>
+                          ${prefIdx > 0 ? '<span class="badge badge-emerald">Substituta</span>' : ''}
+                          ${ex.hipAlert ? '<span class="badge badge-amber">🛡️ Quadril</span>' : ''}
+                        </div>
+                        <div class="flex-wrap" style="margin-top:6px;padding-left:34px;font-size:11.5px;color:#94a3b8;">
+                          <strong style="color:#fda4af;">${ex.sets}× ${opt.repLabel}</strong>
+                          <span>⏱ ${ex.restSec}s</span>
+                          <span style="color:#6ee7b7;">Último: ${lastTxt}</span>
+                        </div>
+                      </div>
+                      <button type="button" data-toggle-guide="${ex.id}" class="${guideOpen ? 'btn-primary' : 'btn-outline-emerald'}" style="width:auto;min-height:44px;padding:7px 11px;font-size:11px;flex-shrink:0;">
+                        🎥 ${guideOpen ? 'Fechar' : 'Ver vídeo'}
+                      </button>
+                    </div>
+
+                    ${ex.hipAlert && !guideOpen ? `<div class="hip-alert-box" style="font-size:11.5px;padding:8px 10px;"><strong>🛡️ Quadril Esq.:</strong> ${escapeHtml(ex.hipAlert)}</div>` : ''}
+
+                    ${renderInlineSubStrip(ex, prefIdx, 'lobby', ex.id)}
+                    ${guideOpen ? renderExerciseGuide(ex, prefIdx) : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    // ==================== TREINO GUIADO ====================
+    function startGuidedSession(workoutId) {
+      const w = WORKOUTS[workoutId];
+      if (!w) return;
+
+      const draftExercises = w.exercises.map(ex => {
+        const prefIdx = Number(state.preferredExVariant[ex.id]) || 0;
+        const opt = getActiveExerciseOption(ex, prefIdx);
+        const lastRec = getLastRecordForExercise(ex.id, opt.name);
+        const sets = Array.from({ length: ex.sets }, (_, idx) => {
+          const prev = lastRec?.sets?.[idx] || lastRec?.sets?.[lastRec.sets.length - 1];
+          const kg = opt.isometria ? 0 : (prev && prev.kg !== '' && prev.kg !== undefined ? Number(prev.kg) : '');
+          const reps = (prev && prev.reps !== '' && Boolean(lastRec.isometria) === Boolean(opt.isometria))
+            ? Number(prev.reps)
+            : (opt.isometria ? (ex.isoDefaultSec || 35) : opt.repMin);
+          return { kg, reps, done: false };
+        });
+        return { exId: ex.id, variantIndex: prefIdx, usedSubstitute: prefIdx > 0, sets };
+      });
+
+      state.selectedWorkoutId = workoutId;
+      state.activeSession = {
+        workoutId,
+        startedAt: new Date().toISOString(),
+        resumedAt: Date.now(),
+        accumulatedSec: 0,
+        running: true,
+        currentExIndex: 0,
+        exercises: draftExercises
+      };
+
+      ui.openGuideId = null;
+      ui.inlineEmbedKey = null;
+      ui.guidedViewAll = false;
+      ensureSessionTicker();
+      persistState();
+      renderApp();
+      showToast(`▶ ${w.name} iniciado! Postura segura e RIR 2–3!`, 'success');
+    }
+
+    function renderGuidedSessionView() {
+      const s = state.activeSession;
+      const w = WORKOUTS[s.workoutId];
+      const elapsed = getSessionElapsedSec(s);
+      const timePct = Math.min(100, Math.round((elapsed / 1800) * 100));
+
+      let totalSets = 0, doneSets = 0;
+      s.exercises.forEach(e => e.sets.forEach(st => { totalSets++; if (st.done) doneSets++; }));
+
+      const curIdx = Math.max(0, Math.min(w.exercises.length - 1, s.currentExIndex || 0));
+
+      return `
+        <div class="stack anim-in">
+          <!-- Cabeçalho Fixo da Sessão -->
+          <section class="sticky-session stack-sm">
+            <div class="row-between">
+              <div style="min-width:0;">
+                <div style="display:flex;align-items:center;gap:7px;">
+                  <span style="width:9px;height:9px;border-radius:99px;background:${s.running ? '#10b981' : '#f59e0b'};"></span>
+                  <span style="font-size:12px;font-weight:900;text-transform:uppercase;color:#fda4af;">${w.name} em andamento</span>
+                </div>
+                <div class="muted" style="font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${w.focus}</div>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+                <span id="sessionTimerDisplay" class="tabular" style="min-height:44px;display:inline-flex;align-items:center;padding:0 10px;border-radius:11px;background:var(--bg);border:1px solid var(--border);font-size:15px;font-weight:900;color:#fff;">${formatMMSS(elapsed)}</span>
+                <button type="button" id="btnPauseSess" class="btn-secondary" style="width:44px;padding:0;" title="Pausar/Retomar">${s.running ? '⏸' : '▶'}</button>
+                <button type="button" id="btnCancelSess" class="btn-secondary" style="width:44px;padding:0;color:#fca5a5;border-color:rgba(239,68,68,0.4);" title="Descartar">✕</button>
+              </div>
+            </div>
+
+            <div>
+              <div class="row-between" style="font-size:11px;color:#94a3b8;margin-bottom:5px;">
+                <span>Séries concluídas: <strong style="color:#6ee7b7;">${doneSets}/${totalSets}</strong></span>
+                <span>Meta sessão: 30:00</span>
+              </div>
+              <div class="progress-track">
+                <div id="sessionTimeBar" class="progress-fill" style="width:${timePct}%;"></div>
+              </div>
+            </div>
+
+            <div class="row-between">
+              <div style="display:flex;gap:6px;overflow-x:auto;">
+                ${w.exercises.map((ex, idx) => {
+                  const allDone = s.exercises[idx].sets.every(st => st.done);
+                  const active = !ui.guidedViewAll && idx === curIdx;
+                  return `<button type="button" data-jump-ex="${idx}" class="jump-pill ${active ? 'active' : allDone ? 'done' : ''}">${allDone ? '✓' : idx + 1}</button>`;
+                }).join('')}
+              </div>
+              <button type="button" id="btnToggleAllEx" class="btn-outline-emerald" style="min-height:40px;padding:6px 11px;font-size:11px;flex-shrink:0;">
+                ${ui.guidedViewAll ? '1 por vez' : 'Ver todos'}
+              </button>
+            </div>
+          </section>
+
+          <!-- Exercício(s) -->
+          <div class="stack">
+            ${ui.guidedViewAll
+              ? w.exercises.map((ex, idx) => renderGuidedExCard(ex, idx, s.exercises[idx], w.exercises.length)).join('')
+              : renderGuidedExCard(w.exercises[curIdx], curIdx, s.exercises[curIdx], w.exercises.length)
+            }
+          </div>
+
+          ${!ui.guidedViewAll ? `
+            <div class="grid-2-fixed">
+              <button type="button" id="btnPrevEx" ${curIdx === 0 ? 'disabled' : ''} class="btn-secondary">← Anterior</button>
+              <button type="button" id="btnNextEx" ${curIdx >= w.exercises.length - 1 ? 'disabled' : ''} class="btn-outline-rose">Próximo →</button>
+            </div>
+          ` : ''}
+
+          <!-- Botão Finalizar -->
+          <section class="card">
+            <button type="button" id="btnOpenFinishModal" class="btn-primary">
+              <span>✔</span>
+              <span>Finalizar e Avaliar Quadril (${doneSets}/${totalSets} séries)</span>
+            </button>
+          </section>
+        </div>
+      `;
+    }
+
+    function renderGuidedExCard(ex, exIdx, draftEx, totalEx) {
+      const vIdx = typeof draftEx.variantIndex === 'number' ? draftEx.variantIndex : 0;
+      const opt = getActiveExerciseOption(ex, vIdx);
+      const lastRec = getLastRecordForExercise(ex.id, opt.name);
+      const prog = getProgressionTip(ex, opt, lastRec);
+      const guideOpen = ui.openGuideId === ex.id;
+      const isIso = Boolean(opt.isometria);
+
+      return `
+        <article class="card stack-sm" style="gap:12px;border-color:${vIdx > 0 ? 'var(--emerald-border)' : '#334155'};">
+          <div class="row-between" style="flex-wrap:wrap;">
+            <div class="flex-wrap">
+              <span class="badge badge-rose">Exercício ${exIdx + 1} de ${totalEx}</span>
+              ${vIdx > 0 ? '<span class="badge badge-emerald">🔄 Substituta</span>' : ''}
+            </div>
+            <button type="button" data-toggle-guide="${ex.id}" class="${guideOpen ? 'btn-primary' : 'btn-outline-emerald'}" style="width:auto;min-height:44px;padding:7px 12px;font-size:11.5px;">
+              🎥 ${guideOpen ? 'Fechar Vídeo' : 'Ver vídeo / detalhes'}
+            </button>
+          </div>
+
+          <div>
+            <h3 class="h2" style="font-size:17px;">${escapeHtml(opt.name)}</h3>
+            <div class="flex-wrap" style="margin-top:5px;font-size:12px;font-weight:700;">
+              <span style="color:#fda4af;">${ex.sets} séries × ${opt.repLabel}</span>
+              <span style="color:#475569;">•</span>
+              <span style="color:#6ee7b7;">⏱ Descanso ${ex.restSec}s</span>
+            </div>
+          </div>
+
+          ${ex.hipAlert ? `<div class="hip-alert-box"><strong>🛡️ Quadril Esquerdo:</strong> ${escapeHtml(ex.hipAlert)}</div>` : ''}
+
+          ${isIso ? `
+            <button type="button" data-iso-timer="${ex.isoDefaultSec || 35}" class="btn-outline-rose" style="width:100%;font-size:13px;font-weight:900;">
+              🧘‍♀️ Iniciar Cronômetro de Isometria (${ex.isoDefaultSec || 35}s)
+            </button>
+          ` : ''}
+
+          ${renderInlineSubStrip(ex, vIdx, 'session', exIdx)}
+
+          <!-- Referência Anterior + Progressão -->
+          <div class="card-dark stack-sm" style="gap:6px;font-size:12px;">
+            <div class="row-between" style="flex-wrap:wrap;">
+              <span style="color:#94a3b8;">📌 Último: <strong style="color:#fff;">${lastRec ? lastRec.sets.map(st => isIso ? `${st.reps}s` : `${st.kg}kg×${st.reps}`).join(' · ') : 'Primeiro registro'}</strong></span>
+              ${lastRec ? `<span style="font-size:10px;color:#64748b;">${formatShortDate(lastRec.date)}</span>` : ''}
+            </div>
+            <div style="padding-top:6px;border-top:1px solid var(--border-soft);color:#e2e8f0;font-size:11.5px;">
+              <strong style="color:${prog.type === 'up' ? '#6ee7b7' : '#fda4af'};">${prog.label}:</strong> ${prog.text}
+            </div>
+          </div>
+
+          ${guideOpen ? renderExerciseGuide(ex, vIdx) : ''}
+
+          <!-- Checklist de Séries -->
+          <div class="stack-sm">
+            <div style="display:grid;grid-template-columns:36px 1fr 1fr 48px;gap:6px;padding:0 6px;font-size:10px;font-weight:800;text-transform:uppercase;color:#94a3b8;text-align:center;">
+              <span style="text-align:left;">Série</span>
+              <span>${isIso ? 'Isometria' : 'Carga (kg)'}</span>
+              <span>${isIso ? 'Segundos' : 'Reps'}</span>
+              <span>Feito</span>
+            </div>
+
+            ${draftEx.sets.map((st, sIdx) => `
+              <div class="set-row ${st.done ? 'done' : ''}">
+                <span class="set-badge">S${sIdx + 1}</span>
+                ${isIso ? `
+                  <button type="button" data-iso-timer="${Number(st.reps) || 35}" class="btn-outline-rose" style="height:44px;font-size:11.5px;padding:0 6px;">⏱ ${Number(st.reps) || 35}s</button>
+                ` : `
+                  <div class="stepper">
+                    <button type="button" data-kg-step="${exIdx}:${sIdx}:-2.5" class="step-btn" aria-label="Diminuir carga">−</button>
+                    <input type="number" step="0.5" inputmode="decimal" data-kg-inp="${exIdx}:${sIdx}" value="${st.kg}" placeholder="0" class="step-input tabular" />
+                    <button type="button" data-kg-step="${exIdx}:${sIdx}:2.5" class="step-btn" aria-label="Aumentar carga">+</button>
+                  </div>
+                `}
+                <div class="stepper">
+                  <button type="button" data-rep-step="${exIdx}:${sIdx}:${isIso ? -5 : -1}" class="step-btn" aria-label="Diminuir reps">−</button>
+                  <input type="number" inputmode="numeric" data-rep-inp="${exIdx}:${sIdx}" value="${st.reps}" placeholder="${opt.repMin}" class="step-input tabular" />
+                  <button type="button" data-rep-step="${exIdx}:${sIdx}:${isIso ? 5 : 1}" class="step-btn" aria-label="Aumentar reps">+</button>
+                </div>
+                <button type="button" data-set-done="${exIdx}:${sIdx}" class="check-btn" aria-label="Concluir série">✓</button>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="row-between" style="padding-top:2px;">
+            ${!isIso ? `<button type="button" data-copy-s1="${exIdx}" style="min-height:38px;font-size:11.5px;font-weight:800;color:#fda4af;">📋 Replicar carga da S1</button>` : `<span style="font-size:11px;color:#64748b;">Core &amp; Estabilidade</span>`}
+            <button type="button" data-manual-rest="${ex.restSec}" style="min-height:38px;font-size:11.5px;font-weight:800;color:#6ee7b7;">⏱ Descanso (${ex.restSec}s)</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function openFinishSessionModal() {
+      const s = state.activeSession;
+      if (!s) return;
+      const w = WORKOUTS[s.workoutId];
+      const durSec = getSessionElapsedSec(s);
+      let doneSets = 0, plannedSets = 0, totalVol = 0;
+
+      w.exercises.forEach((ex, idx) => {
+        plannedSets += ex.sets;
+        const dr = s.exercises[idx];
+        const opt = getActiveExerciseOption(ex, dr.variantIndex || 0);
+        dr.sets.forEach(st => {
+          if (st.done) {
+            doneSets++;
+            if (!opt.isometria) totalVol += (Number(st.kg) || 0) * (Number(st.reps) || 0);
+          }
+        });
+      });
+
+      if (doneSets === 0) {
+        showToast('Marque pelo menos 1 série concluída antes de finalizar.', 'error');
+        return;
+      }
+
+      const prevSame = getLastSessionForWorkout(s.workoutId);
+      const diffVol = prevSame ? Math.round(totalVol) - prevSame.totalVolumeKg : null;
+      const diffPct = prevSame && prevSame.totalVolumeKg > 0 ? Math.round((diffVol / prevSame.totalVolumeKg) * 100) : null;
+
+      let chosenHip = 'ok'; // 'ok' | 'mild' | 'discomfort'
+
+      openModal({
+        title: `✔ Finalizar ${w.name}`,
+        bodyHtml: `
+          <div class="stack-sm" style="gap:13px;">
+            <div class="grid-3" style="text-align:center;">
+              <div class="card-dark">
+                <div style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;">Duração</div>
+                <div class="tabular" style="font-size:17px;font-weight:900;color:#fff;margin-top:2px;">${formatMMSS(durSec)}</div>
+              </div>
+              <div class="card-dark">
+                <div style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;">Séries</div>
+                <div class="tabular" style="font-size:17px;font-weight:900;color:#6ee7b7;margin-top:2px;">${doneSets}/${plannedSets}</div>
+              </div>
+              <div class="card-dark">
+                <div style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;">Volume</div>
+                <div class="tabular" style="font-size:17px;font-weight:900;color:#fda4af;margin-top:2px;">${Math.round(totalVol).toLocaleString('pt-BR')} kg</div>
+              </div>
+            </div>
+
+            ${prevSame ? `
+              <div class="card-dark" style="font-size:12px;border-color:${diffVol >= 0 ? 'var(--emerald-border)' : 'var(--amber-border)'};">
+                <strong>Comparativo vs último ${w.name}:</strong>
+                ${diffVol >= 0 ? '📈' : '📉'} ${diffVol >= 0 ? '+' : ''}${diffVol.toLocaleString('pt-BR')} kg
+                ${diffPct !== null ? `(${diffPct >= 0 ? '+' : ''}${diffPct}%)` : ''}
+              </div>
+            ` : ''}
+
+            <div>
+              <span class="field-label">🛡️ Status do Quadril Esquerdo neste treino:</span>
+              <div class="stack-sm" style="gap:7px;">
+                ${[
+                  { id: 'ok', label: 'Sem dor ✅' },
+                  { id: 'mild', label: 'Leve desconforto ⚠️' },
+                  { id: 'discomfort', label: 'Dor / Limitou 🛑' }
+                ].map(hp => `
+                  <button type="button" data-fin-hip="${hp.id}" class="btn-secondary" style="justify-content:flex-start;padding:11px 14px;border-width:2px;text-align:left;${hp.id === 'ok' ? 'border-color:#10b981;background:rgba(16,185,129,0.16);color:#a7f3d0;' : ''}">${hp.label}</button>
+                `).join('')}
+              </div>
+            </div>
+
+            <div>
+              <label for="finNotes" class="field-label">Observações (regulagem de banco, sensações):</label>
+              <input id="finNotes" type="text" class="input-box" placeholder="Ex.: Leg Horizontal no pino 4 ficou excelente..." />
+            </div>
+          </div>
+        `,
+        confirmText: '✔ Salvar no Histórico',
+        cancelText: 'Voltar',
+        onConfirm: () => {
+          const notes = (document.getElementById('finNotes')?.value || '').trim();
+          const recordedExercises = w.exercises.map((ex, idx) => {
+            const dr = s.exercises[idx];
+            const vIdx = dr.variantIndex || 0;
+            const opt = getActiveExerciseOption(ex, vIdx);
+            return {
+              exId: ex.id,
+              originalName: ex.name,
+              executedName: opt.name,
+              variantIndex: vIdx,
+              usedSubstitute: vIdx > 0,
+              isometria: Boolean(opt.isometria),
+              sets: dr.sets.map(st => ({ kg: Number(st.kg) || 0, reps: Number(st.reps) || 0, done: Boolean(st.done) }))
+            };
+          });
+
+          const newRec = {
+            id: 'sess_' + Date.now(),
+            workoutId: s.workoutId,
+            workoutName: w.name,
+            workoutFocus: w.focus,
+            startedAt: s.startedAt,
+            completedAt: new Date().toISOString(),
+            durationSec: durSec,
+            totalSetsDone: doneSets,
+            totalSetsPlanned: plannedSets,
+            totalVolumeKg: Math.round(totalVol),
+            hipStatus: chosenHip,
+            notes,
+            exercises: recordedExercises
+          };
+
+          clearInterval(ui.sessionTickInterval);
+          stopFloatTimer();
+          state.workoutHistory.unshift(newRec);
+          state.activeSession = null;
+          state.selectedWorkoutId = getRecommendedWorkoutId();
+          persistState();
+          renderApp();
+          showToast(`🎉 ${w.name} salvo! Próximo na fila: Treino ${state.selectedWorkoutId}.`, 'success');
+        }
+      });
+
+      document.querySelectorAll('[data-fin-hip]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          chosenHip = btn.dataset.finHip;
+          document.querySelectorAll('[data-fin-hip]').forEach(b => {
+            const act = b.dataset.finHip === chosenHip;
+            const col = b.dataset.finHip === 'ok' ? '#10b981' : b.dataset.finHip === 'mild' ? '#f59e0b' : '#ef4444';
+            b.style.borderColor = act ? col : 'var(--border)';
+            b.style.background = act ? `${col}26` : 'var(--card-elev)';
+            b.style.color = act ? '#fff' : 'var(--text)';
+          });
+        });
+      });
+    }
+
+    function applyExerciseSubstitute(mode, refKey, chosenIdx, fixDefault = false) {
+      let ex = null;
+      if (mode === 'session' && state.activeSession) {
+        const idx = Number(refKey);
+        ex = WORKOUTS[state.activeSession.workoutId]?.exercises?.[idx];
+        const dr = state.activeSession.exercises[idx];
+        if (ex && dr) {
+          const prevOpt = getActiveExerciseOption(ex, dr.variantIndex || 0);
+          const nextOpt = getActiveExerciseOption(ex, chosenIdx);
+          dr.variantIndex = chosenIdx;
+          dr.usedSubstitute = chosenIdx > 0;
+          if (Boolean(prevOpt.isometria) !== Boolean(nextOpt.isometria)) {
+            dr.sets.forEach(st => {
+              if (!st.done) {
+                st.kg = nextOpt.isometria ? 0 : '';
+                st.reps = nextOpt.isometria ? 35 : nextOpt.repMin;
+              }
+            });
+          }
+          if (fixDefault) state.preferredExVariant[ex.id] = chosenIdx;
+        }
+      } else {
+        ex = ALL_EXERCISES.find(e => e.id === refKey);
+        if (ex) state.preferredExVariant[ex.id] = chosenIdx;
+      }
+      if (!ex) return;
+      ui.inlineEmbedKey = null;
+      const opt = getActiveExerciseOption(ex, chosenIdx);
+      persistState();
+      renderApp();
+      showToast(`🔄 Máquina selecionada: ${opt.name}`, 'success');
+    }
+
+    function openExerciseSubModal(mode, refKey) {
+      let ex = null, curIdx = 0;
+      if (mode === 'session' && state.activeSession) {
+        const idx = Number(refKey);
+        ex = WORKOUTS[state.activeSession.workoutId]?.exercises?.[idx];
+        curIdx = state.activeSession.exercises[idx]?.variantIndex || 0;
+      } else {
+        ex = ALL_EXERCISES.find(e => e.id === refKey);
+        curIdx = Number(state.preferredExVariant[refKey]) || 0;
+      }
+      if (!ex) return;
+
+      const variants = getExerciseVariants(ex);
+      openModal({
+        title: `🔄 Substitutos — ${ex.shortName}`,
+        bodyHtml: `
+          <div class="stack-sm">
+            <p class="muted" style="margin:0;">Escolha qualquer máquina/polia equivalente com vídeo demonstrativo próprio:</p>
+            ${variants.map((v, idx) => {
+              const sel = idx === curIdx;
+              return `
+                <div class="card-dark" style="border:2px solid ${sel ? 'var(--rose)' : 'var(--border)'};">
+                  <div class="row-start">
+                    <div style="min-width:0;">
+                      <div class="flex-wrap" style="margin-bottom:4px;">
+                        <span class="badge ${v.isPrincipal ? 'badge-rose' : 'badge-emerald'}">${v.isPrincipal ? 'Padrão' : `Substituta ${idx}`}</span>
+                        ${sel ? '<span style="font-size:11px;font-weight:800;color:#6ee7b7;">✓ Em uso</span>' : ''}
+                      </div>
+                      <div style="font-size:14px;font-weight:800;color:#fff;">${escapeHtml(v.name)}</div>
+                      <div class="muted" style="font-size:11px;margin-top:3px;">${escapeHtml(v.note)}</div>
+                    </div>
+                    <a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank" rel="noopener noreferrer" class="btn-outline-rose" style="min-height:40px;padding:6px 10px;font-size:11px;flex-shrink:0;">🎥 Vídeo ↗</a>
+                  </div>
+                  <div style="display:flex;gap:8px;margin-top:10px;">
+                    <button type="button" data-pick-sub="${idx}:once" class="${sel ? 'btn-secondary' : 'btn-emerald'}" style="flex:1;">
+                      ${mode === 'session' ? (sel ? 'Em uso hoje' : 'Usar hoje') : (sel ? 'Padrão atual' : 'Definir padrão')}
+                    </button>
+                    ${mode === 'session' && !sel ? `<button type="button" data-pick-sub="${idx}:always" class="btn-outline-rose" style="padding:9px 12px;font-size:11px;">Fixar padrão</button>` : ''}
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `,
+        hideConfirm: true,
+        cancelText: 'Fechar'
+      });
+
+      document.querySelectorAll('[data-pick-sub]').forEach(b => {
+        b.addEventListener('click', () => {
+          const [iStr, scope] = b.dataset.pickSub.split(':');
+          closeModal();
+          applyExerciseSubstitute(mode, refKey, Number(iStr), scope === 'always');
+        });
+      });
+    }
+
+    function bindTreinoEvents() {
+      document.getElementById('btnToggleHipBanner')?.addEventListener('click', () => {
+        state.hipBannerCollapsed = !state.hipBannerCollapsed;
+        persistState(); renderApp();
+      });
+
+      document.querySelectorAll('[data-select-workout]').forEach(b => b.addEventListener('click', () => {
+        state.selectedWorkoutId = b.dataset.selectWorkout;
+        ui.openGuideId = null; ui.inlineEmbedKey = null;
+        persistState(); renderApp();
+      }));
+
+      document.querySelectorAll('[data-start-workout]').forEach(b => b.addEventListener('click', () => startGuidedSession(b.dataset.startWorkout)));
+
+      document.querySelectorAll('[data-toggle-guide]').forEach(b => b.addEventListener('click', () => {
+        ui.openGuideId = ui.openGuideId === b.dataset.toggleGuide ? null : b.dataset.toggleGuide;
+        ui.inlineEmbedKey = null;
+        renderApp();
+      }));
+
+      document.querySelectorAll('[data-open-embed]').forEach(b => b.addEventListener('click', () => { ui.inlineEmbedKey = b.dataset.openEmbed; renderApp(); }));
+      document.querySelectorAll('[data-close-embed]').forEach(b => b.addEventListener('click', () => { ui.inlineEmbedKey = null; renderApp(); }));
+
+      document.querySelectorAll('[data-quick-ex-sub]').forEach(b => b.addEventListener('click', () => {
+        const [m, k, i] = b.dataset.quickExSub.split(':');
+        applyExerciseSubstitute(m, k, Number(i), false);
+      }));
+
+      document.querySelectorAll('[data-open-ex-sub]').forEach(b => b.addEventListener('click', () => {
+        const [m, k] = b.dataset.openExSub.split(':');
+        openExerciseSubModal(m, k);
+      }));
+
+      document.getElementById('btnPauseSess')?.addEventListener('click', () => {
+        const s = state.activeSession;
+        if (!s) return;
+        if (s.running) { s.accumulatedSec = getSessionElapsedSec(s); s.running = false; s.resumedAt = null; clearInterval(ui.sessionTickInterval); }
+        else { s.running = true; s.resumedAt = Date.now(); ensureSessionTicker(); }
+        persistState(); renderApp();
+      });
+
+      document.getElementById('btnCancelSess')?.addEventListener('click', () => {
+        openModal({
+          title: 'Descartar treino atual?',
+          bodyHtml: '<p class="muted" style="margin:0;">As séries desta sessão serão descartadas, mantendo todo o histórico anterior salvo.</p>',
+          confirmText: 'Sim, descartar',
+          cancelText: 'Continuar',
+          onConfirm: () => { clearInterval(ui.sessionTickInterval); stopFloatTimer(); state.activeSession = null; persistState(); renderApp(); showToast('Sessão descartada.', 'info'); }
+        });
+      });
+
+      document.getElementById('btnOpenFinishModal')?.addEventListener('click', openFinishSessionModal);
+      document.getElementById('btnToggleAllEx')?.addEventListener('click', () => { ui.guidedViewAll = !ui.guidedViewAll; renderApp(); });
+
+      document.querySelectorAll('[data-jump-ex]').forEach(b => b.addEventListener('click', () => {
+        if (!state.activeSession) return;
+        state.activeSession.currentExIndex = Number(b.dataset.jumpEx);
+        ui.guidedViewAll = false;
+        persistState(); renderApp();
+      }));
+
+      document.getElementById('btnPrevEx')?.addEventListener('click', () => {
+        if (state.activeSession && state.activeSession.currentExIndex > 0) {
+          state.activeSession.currentExIndex--; persistState(); renderApp(); window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+
+      document.getElementById('btnNextEx')?.addEventListener('click', () => {
+        if (!state.activeSession) return;
+        const max = WORKOUTS[state.activeSession.workoutId].exercises.length - 1;
+        if (state.activeSession.currentExIndex < max) {
+          state.activeSession.currentExIndex++; persistState(); renderApp(); window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+
+      document.querySelectorAll('[data-kg-step]').forEach(b => b.addEventListener('click', () => {
+        const [eI, sI, d] = b.dataset.kgStep.split(':').map(Number);
+        const st = state.activeSession?.exercises?.[eI]?.sets?.[sI];
+        if (!st) return;
+        st.kg = Math.max(0, Math.round(((Number(st.kg) || 0) + d) * 10) / 10);
+        persistState(); renderApp();
+      }));
+
+      document.querySelectorAll('[data-kg-inp]').forEach(inp => inp.addEventListener('input', e => {
+        const [eI, sI] = inp.dataset.kgInp.split(':').map(Number);
+        const st = state.activeSession?.exercises?.[eI]?.sets?.[sI];
+        if (st) { st.kg = e.target.value; persistState(); }
+      }));
+
+      document.querySelectorAll('[data-rep-step]').forEach(b => b.addEventListener('click', () => {
+        const [eI, sI, d] = b.dataset.repStep.split(':').map(Number);
+        const st = state.activeSession?.exercises?.[eI]?.sets?.[sI];
+        if (!st) return;
+        st.reps = Math.max(0, (Number(st.reps) || 0) + d);
+        persistState(); renderApp();
+      }));
+
+      document.querySelectorAll('[data-rep-inp]').forEach(inp => inp.addEventListener('input', e => {
+        const [eI, sI] = inp.dataset.repInp.split(':').map(Number);
+        const st = state.activeSession?.exercises?.[eI]?.sets?.[sI];
+        if (st) { st.reps = e.target.value; persistState(); }
+      }));
+
+      document.querySelectorAll('[data-set-done]').forEach(b => b.addEventListener('click', () => {
+        const [eI, sI] = b.dataset.setDone.split(':').map(Number);
+        const s = state.activeSession;
+        const st = s?.exercises?.[eI]?.sets?.[sI];
+        if (!st) return;
+        st.done = !st.done;
+        if (st.done) startFloatTimer(WORKOUTS[s.workoutId].exercises[eI].restSec, 'rest');
+        persistState(); renderApp();
+      }));
+
+      document.querySelectorAll('[data-iso-timer]').forEach(b => b.addEventListener('click', () => startFloatTimer(Number(b.dataset.isoTimer) || 35, 'plank')));
+      document.querySelectorAll('[data-manual-rest]').forEach(b => b.addEventListener('click', () => startFloatTimer(Number(b.dataset.manualRest) || 45, 'rest')));
+
+      document.querySelectorAll('[data-copy-s1]').forEach(b => b.addEventListener('click', () => {
+        const sets = state.activeSession?.exercises?.[Number(b.dataset.copyS1)]?.sets;
+        if (!sets || sets.length < 2) return;
+        const kg0 = sets[0].kg;
+        sets.forEach((st, i) => { if (i > 0) st.kg = kg0; });
+        persistState(); renderApp(); showToast(`Carga ${kg0 || 0} kg replicada nas demais séries.`, 'info');
+      }));
+    }
+
+    // ==================== ABA 2: DIETA, HIDRATAÇÃO & PASSOS ====================
+    function getDisplayedFood(item) {
+      const sel = state.mealSubs[item.id];
+      if (typeof sel === 'string' && sel.startsWith('custom:')) return { text: sel.slice(7), isSub: true, isCustom: true, subIdx: -2 };
+      if (typeof sel === 'number' && sel >= 0 && item.subs[sel]) return { text: item.subs[sel].text, isSub: true, isCustom: false, subIdx: sel };
+      return { text: item.base[state.dietMode], isSub: false, isCustom: false, subIdx: -1 };
+    }
+
+    function renderDietaTab() {
+      const log = getTodayDietLog();
+      const mealsDoneCount = MEALS.filter(m => log.mealsDone[m.id]).length;
+      const adherencePct = Math.round((mealsDoneCount / MEALS.length) * 100);
+
+      const cupMl = 260;
+      const waterGoal = 2600;
+      const waterMl = Number(log.waterMl) || 0;
+      const waterPct = Math.min(100, Math.round((waterMl / waterGoal) * 100));
+      const filledCups = Math.min(10, Math.floor(waterMl / cupMl));
+
+      const steps = Number(log.steps) || 0;
+      const stepsGoal = 6500;
+      const stepsPct = Math.min(100, Math.round((steps / stepsGoal) * 100));
+
+      return `
+        <div class="stack anim-in">
+          <!-- Banner Clínico Compacto (Exames 23/10/2026) -->
+          <section class="clinical-banner stack-sm">
+            <div class="row-between" style="flex-wrap:wrap;">
+              <h2 class="h3" style="color:#fcd34d;">🧬 Ajustes pelos Exames de 23/10/2026</h2>
+              <span class="badge badge-emerald">0% Suplementos</span>
+            </div>
+            <ul style="margin:0;padding-left:18px;font-size:12px;color:#e2e8f0;line-height:1.52;">
+              <li><strong>🩸 Ferritina 221 (acima de 205):</strong> foco em peixes, frango e ovos; carne vermelha máx. 1–2x/sem; evitar suco cítrico junto de carne vermelha; zero suplemento de ferro.</li>
+              <li><strong>🫀 Colesterol Total 210 (LDL est. ~140) &amp; HDL 60:</strong> ≥ 32g de fibras solúveis (aveia, chia, linhaça, feijão), azeite extravirgem e peixes ricos em ômega-3.</li>
+              <li><strong>💊 B12 1.041 (acima de 883) &amp; Vit D 51,9 (ótima):</strong> manter ZERO polivitamínicos ou B12 sem orientação médica.</li>
+            </ul>
+          </section>
+
+          <!-- Seletor de 2 Modos Calóricos -->
+          <section class="grid-2">
+            ${Object.values(DIET_MODES).map(m => {
+              const act = state.dietMode === m.id;
+              return `
+                <button type="button" data-diet-mode="${m.id}" class="mode-card ${act ? 'active' : ''}">
+                  <div class="row-between" style="margin-bottom:6px;">
+                    <span class="badge ${act ? 'badge-rose' : 'badge-emerald'}">${m.badge}</span>
+                    <span class="tabular" style="font-size:15px;font-weight:900;color:${act ? '#fda4af' : '#fff'};">${m.kcal.toLocaleString('pt-BR')} kcal</span>
+                  </div>
+                  <div style="font-size:14px;font-weight:800;color:#fff;">${m.title}</div>
+                  <p class="muted" style="margin:4px 0 8px;font-size:11.5px;">${m.desc}</p>
+                  <div class="flex-wrap tabular" style="font-size:11px;font-weight:800;">
+                    <span style="color:#fda4af;">Prot ${m.p}g</span>
+                    <span style="color:#7dd3fc;">Carbo ${m.c}g (${m.fiber} fib.)</span>
+                    <span style="color:#fcd34d;">Gord ${m.g}g</span>
+                  </div>
+                </button>
+              `;
+            }).join('')}
+          </section>
+
+          <!-- Card Destacado: Hidratação Prioritária (2,6 L / 10 copos de 260 ml) -->
+          <section class="cyan-card stack-sm" style="gap:11px;">
+            <div class="row-between" style="flex-wrap:wrap;">
+              <div>
+                <div class="flex-wrap">
+                  <h3 class="h3" style="color:#7dd3fc;">💧 Hidratação Prioritária — Meta 2,6 L/dia</h3>
+                  <span class="badge badge-amber">Água 46,1% · eTFG 87</span>
+                </div>
+                <p class="muted" style="margin:4px 0 0;font-size:11.5px;color:#cbd5e1;">
+                  Água corporal baixa (46,1%) na bioimpedância + suporte renal para eTFG 87 / creatinina 0,86. Conclua os 10 copos (260 ml) entre 04:30 e 19:30.
+                </p>
+              </div>
+              <div style="text-align:right;">
+                <div class="tabular" style="font-size:22px;font-weight:900;color:#fff;">${(waterMl / 1000).toFixed(2).replace('.', ',')} <span style="font-size:12px;color:#94a3b8;">/ 2,60 L</span></div>
+                <div style="font-size:11px;font-weight:800;color:#7dd3fc;">${filledCups}/10 copos (${waterPct}%)</div>
+              </div>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-fill cyan-only" style="width:${waterPct}%;"></div>
+            </div>
+
+            <div class="cup-grid">
+              ${Array.from({ length: 10 }, (_, idx) => {
+                const filled = idx < filledCups;
+                return `
+                  <button type="button" data-cup-idx="${idx + 1}" class="cup-btn ${filled ? 'filled' : ''}" title="${(idx + 1) * cupMl} ml">
+                    <span>💧</span>
+                    <span>${idx + 1}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            <div class="grid-2-fixed">
+              <button type="button" data-add-water="-260" class="btn-secondary">− 1 copo (260 ml)</button>
+              <button type="button" data-add-water="260" class="btn-cyan">+ 1 copo (260 ml)</button>
+            </div>
+
+            <div style="padding-top:6px;border-top:1px solid rgba(56,189,248,0.22);">
+              <div style="font-size:10px;font-weight:800;text-transform:uppercase;color:#bae6fd;margin-bottom:6px;">Lembretes de Horários (04:30 → 19:30):</div>
+              <div class="flex-wrap">
+                ${WATER_SCHEDULE.map(ws => {
+                  const chk = Boolean(log.waterSched[ws.id]);
+                  return `<button type="button" data-wsched="${ws.id}" class="sched-pill ${chk ? 'checked' : ''}">${chk ? '✓' : '○'} ${ws.label}</button>`;
+                }).join('')}
+              </div>
+            </div>
+          </section>
+
+          <!-- Checklist do Dia + Mini Rastreador de Passos Diários (HDL) -->
+          <div class="grid-2">
+            <section class="card stack-sm">
+              <div class="row-between">
+                <div>
+                  <h3 class="h3">🍽️ Refeições Hoje: ${mealsDoneCount}/4</h3>
+                  <p class="muted" style="margin:2px 0 0;font-size:11px;">${formatShortDate(getTodayKey())} · ${adherencePct}% concluído</p>
+                </div>
+                <button type="button" id="btnResetDayDiet" class="btn-secondary" style="min-height:40px;padding:6px 10px;font-size:11px;">↺ Zerar</button>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" style="width:${adherencePct}%;"></div>
+              </div>
+            </section>
+
+            <section class="card stack-sm" style="border-color:var(--emerald-border);">
+              <div class="row-between">
+                <div>
+                  <h3 class="h3" style="color:#6ee7b7;">🚶 Passos Diários (HDL)</h3>
+                  <p class="muted" style="margin:2px 0 0;font-size:11px;">Meta opcional: 6.000–7.500 (sem dor no quadril)</p>
+                </div>
+                <strong class="tabular" style="font-size:16px;color:#fff;">${steps.toLocaleString('pt-BR')}</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill emerald-only" style="width:${stepsPct}%;"></div>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <input id="inpStepsToday" type="number" inputmode="numeric" value="${steps || ''}" placeholder="Digitar passos" class="input-box tabular" style="min-height:40px;padding:7px 10px;font-size:12px;" />
+                <button type="button" data-add-steps="1000" class="btn-outline-emerald" style="min-height:40px;padding:6px 10px;font-size:11px;flex-shrink:0;">+1.000</button>
+              </div>
+            </section>
+          </div>
+
+          <!-- 4 Refeições com Substitutos em 1 Toque + Personalizar -->
+          <div class="stack">
+            ${MEALS.map(meal => {
+              const done = Boolean(log.mealsDone[meal.id]);
+              return `
+                <article class="card stack-sm" style="gap:11px;border-color:${done ? 'var(--emerald)' : 'var(--border)'};">
+                  <div class="row-between" style="padding-bottom:9px;border-bottom:1px solid var(--border-soft);">
+                    <div style="min-width:0;">
+                      <div class="flex-wrap">
+                        <span class="badge badge-rose">${meal.time}</span>
+                        <h4 class="h3" style="font-size:14.5px;">Refeição ${meal.num} — ${meal.title}</h4>
+                      </div>
+                      <div class="muted tabular" style="margin-top:4px;font-size:11.5px;">~${meal.kcal[state.dietMode]} kcal</div>
+                    </div>
+                    <button type="button" data-meal-done="${meal.id}" class="${done ? 'btn-emerald' : 'btn-secondary'}" style="width:auto;min-height:44px;padding:9px 14px;font-size:12px;flex-shrink:0;">
+                      ${done ? '✓ Feita' : 'Marcar'}
+                    </button>
+                  </div>
+
+                  ${meal.note ? `<div class="card-dark" style="border-color:var(--amber-border);font-size:11.5px;color:#fef3c7;">${meal.note}</div>` : ''}
+
+                  ${meal.items.map(item => {
+                    const info = getDisplayedFood(item);
+                    return `
+                      <div class="card-dark stack-sm" style="gap:8px;border-color:${info.isSub ? 'var(--emerald-border)' : (item.diff && state.dietMode === 'maint' ? 'var(--amber-border)' : 'var(--border)')};">
+                        <div class="row-start">
+                          <div style="min-width:0;flex:1;">
+                            <div class="flex-wrap" style="margin-bottom:3px;">
+                              <span style="font-size:10px;font-weight:800;text-transform:uppercase;color:#94a3b8;">${item.tag}</span>
+                              ${info.isSub ? `<span class="badge badge-emerald">${info.isCustom ? 'Personalizado' : 'Substituído'}</span>` : ''}
+                            </div>
+                            <div style="font-size:13px;font-weight:700;color:${info.isSub ? '#d1fae5' : '#f8fafc'};">${escapeHtml(info.text)}</div>
+                          </div>
+                          <button type="button" data-open-meal-sub="${meal.id}:${item.id}" class="btn-outline-emerald" style="min-height:40px;padding:6px 10px;font-size:11px;flex-shrink:0;">🔄 Opções</button>
+                        </div>
+
+                        <div class="flex-wrap" style="padding-top:7px;border-top:1px solid var(--border-soft);">
+                          <span style="font-size:10px;font-weight:700;color:#64748b;">Trocar:</span>
+                          <button type="button" data-quick-meal="${item.id}:-1" class="chip ${!info.isSub ? 'active-base' : ''}">${!info.isSub ? '✓ ' : ''}Padrão</button>
+                          ${item.subs.map((sub, idx) => `
+                            <button type="button" data-quick-meal="${item.id}:${idx}" class="chip ${info.subIdx === idx ? 'active-sub' : ''}">${info.subIdx === idx ? '✓ ' : ''}${escapeHtml(sub.short)}</button>
+                          `).join('')}
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </article>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function openMealSubModal(mealId, itemId) {
+      const meal = MEALS.find(m => m.id === mealId);
+      const item = meal?.items?.find(i => i.id === itemId);
+      if (!meal || !item) return;
+      const info = getDisplayedFood(item);
+
+      openModal({
+        title: `🔄 Opções / Personalizar — ${item.tag}`,
+        bodyHtml: `
+          <div class="stack-sm">
+            <p class="muted" style="margin:0;">Refeição ${meal.num} (${DIET_MODES[state.dietMode].title}). Selecione uma equivalência, restaure o padrão ou digite uma troca livre:</p>
+            <button type="button" data-pick-meal="-1" class="card-dark" style="text-align:left;width:100%;border:2px solid ${!info.isSub ? 'var(--rose)' : 'var(--border)'};">
+              <span class="badge badge-rose" style="margin-bottom:4px;">Restaurar Padrão</span>
+              <div style="font-size:13px;font-weight:700;color:#fff;">${escapeHtml(item.base[state.dietMode])}</div>
+            </button>
+            ${item.subs.map((sub, idx) => `
+              <button type="button" data-pick-meal="${idx}" class="card-dark" style="text-align:left;width:100%;border:2px solid ${info.subIdx === idx ? 'var(--emerald)' : 'var(--border)'};">
+                <span class="badge badge-emerald" style="margin-bottom:4px;">${escapeHtml(sub.short)}</span>
+                <div style="font-size:13px;font-weight:700;color:#f1f5f9;">${escapeHtml(sub.text)}</div>
+              </button>
+            `).join('')}
+            <div style="padding-top:8px;border-top:1px solid var(--border);">
+              <label for="customMealInp" class="field-label">✏️ Troca livre personalizada:</label>
+              <div style="display:flex;gap:8px;">
+                <input id="customMealInp" type="text" class="input-box" value="${info.isCustom ? escapeHtml(info.text) : ''}" placeholder="Ex.: 140g salmão grelhado + 120g inhame" />
+                <button type="button" id="btnApplyCustomMeal" class="btn-emerald" style="width:auto;padding:0 16px;">Usar</button>
+              </div>
+            </div>
+          </div>
+        `,
+        hideConfirm: true,
+        cancelText: 'Fechar'
+      });
+
+      document.querySelectorAll('[data-pick-meal]').forEach(b => b.addEventListener('click', () => {
+        state.mealSubs[item.id] = Number(b.dataset.pickMeal);
+        persistState(); closeModal(); renderApp();
+        showToast(Number(b.dataset.pickMeal) === -1 ? 'Opção padrão restaurada.' : 'Alimento substituído!', 'success');
+      }));
+
+      document.getElementById('btnApplyCustomMeal')?.addEventListener('click', () => {
+        const val = (document.getElementById('customMealInp')?.value || '').trim();
+        if (!val) { showToast('Digite o alimento substituto.', 'error'); return; }
+        state.mealSubs[item.id] = 'custom:' + val;
+        persistState(); closeModal(); renderApp();
+        showToast('Troca personalizada aplicada!', 'success');
+      });
+    }
+
+    function bindDietaEvents() {
+      const log = getTodayDietLog();
+
+      document.querySelectorAll('[data-diet-mode]').forEach(b => b.addEventListener('click', () => {
+        state.dietMode = b.dataset.dietMode; persistState(); renderApp();
+      }));
+
+      document.querySelectorAll('[data-cup-idx]').forEach(b => b.addEventListener('click', () => {
+        const target = Number(b.dataset.cupIdx) * 260;
+        log.waterMl = log.waterMl === target ? Math.max(0, target - 260) : target;
+        persistState(); renderApp();
+      }));
+
+      document.querySelectorAll('[data-add-water]').forEach(b => b.addEventListener('click', () => {
+        log.waterMl = Math.max(0, Math.min(5200, (Number(log.waterMl) || 0) + Number(b.dataset.addWater)));
+        persistState(); renderApp();
+      }));
+
+      document.querySelectorAll('[data-wsched]').forEach(b => b.addEventListener('click', () => {
+        const id = b.dataset.wsched;
+        log.waterSched[id] = !log.waterSched[id];
+        persistState(); renderApp();
+      }));
+
+      document.getElementById('inpStepsToday')?.addEventListener('change', e => {
+        log.steps = Math.max(0, Number(e.target.value) || 0);
+        persistState(); renderApp();
+      });
+
+      document.querySelectorAll('[data-add-steps]').forEach(b => b.addEventListener('click', () => {
+        log.steps = Math.max(0, (Number(log.steps) || 0) + Number(b.dataset.addSteps));
+        persistState(); renderApp();
+      }));
+
+      document.querySelectorAll('[data-meal-done]').forEach(b => b.addEventListener('click', () => {
+        const id = b.dataset.mealDone;
+        log.mealsDone[id] = !log.mealsDone[id];
+        persistState(); renderApp();
+      }));
+
+      document.querySelectorAll('[data-quick-meal]').forEach(b => b.addEventListener('click', () => {
+        const [itemId, idxStr] = b.dataset.quickMeal.split(':');
+        state.mealSubs[itemId] = Number(idxStr);
+        persistState(); renderApp();
+        showToast(Number(idxStr) === -1 ? 'Padrão restaurado.' : 'Alimento trocado!', 'success');
+      }));
+
+      document.querySelectorAll('[data-open-meal-sub]').forEach(b => b.addEventListener('click', () => {
+        const [mId, iId] = b.dataset.openMealSub.split(':');
+        openMealSubModal(mId, iId);
+      }));
+
+      document.getElementById('btnResetDayDiet')?.addEventListener('click', () => {
+        openModal({
+          title: 'Zerar checklist de hoje?',
+          bodyHtml: '<p class="muted" style="margin:0;">Desmarca refeições, água e passos registrados hoje.</p>',
+          confirmText: 'Zerar hoje',
+          onConfirm: () => {
+            state.dailyLogs[getTodayKey()] = { waterMl: 0, waterSched: {}, mealsDone: {}, steps: 0 };
+            persistState(); renderApp(); showToast('Dia reiniciado.', 'info');
+          }
+        });
+      });
+    }
+
+    // ==================== ABA 3: EVOLUÇÃO, BIOIMPEDÂNCIA & EXAMES OUT/2026 ====================
+    function renderLoadChartSVG(exId) {
+      const pts = [];
+      [...state.workoutHistory].reverse().forEach(sess => {
+        const f = (sess.exercises || []).find(e => e.exId === exId && e.sets.some(st => st.done));
+        if (f) {
+          const done = f.sets.filter(st => st.done);
+          const val = f.isometria ? Math.max(...done.map(st => Number(st.reps) || 0)) : Math.max(...done.map(st => Number(st.kg) || 0));
+          pts.push({ date: formatShortDate(sess.completedAt), val, unit: f.isometria ? 's' : 'kg' });
+        }
+      });
+
+      if (!pts.length) {
+        return `<div class="card-dark" style="text-align:center;padding:26px 14px;font-size:12px;color:#94a3b8;">Conclua pelo menos 1 treino com esta máquina para visualizar o gráfico de evolução de cargas.</div>`;
+      }
+
+      const W = 500, H = 155, pX = 36, pY = 24;
+      const vals = pts.map(p => p.val);
+      const minV = Math.max(0, Math.min(...vals) - 4);
+      const maxV = Math.max(...vals, minV + 8) + 4;
+      const span = maxV - minV || 1;
+
+      const coords = pts.map((pt, i) => ({
+        ...pt,
+        x: pts.length === 1 ? W / 2 : pX + (i / (pts.length - 1)) * (W - pX * 2),
+        y: H - pY - ((pt.val - minV) / span) * (H - pY * 2)
+      }));
+      const poly = coords.map(c => `${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(' ');
+
+      return `
+        <div class="card-dark" style="padding:10px;">
+          <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:150px;display:block;">
+            <line x1="${pX}" y1="${pY}" x2="${W - pX}" y2="${pY}" stroke="#23304d" stroke-dasharray="4"/>
+            <line x1="${pX}" y1="${H - pY}" x2="${W - pX}" y2="${H - pY}" stroke="#23304d"/>
+            ${coords.length > 1 ? `<polyline fill="none" stroke="#f43f5e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="${poly}"/>` : ''}
+            ${coords.map(c => `
+              <circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="5" fill="#10b981" stroke="#0b1120" stroke-width="2"/>
+              <text x="${c.x.toFixed(1)}" y="${(c.y - 10).toFixed(1)}" text-anchor="middle" fill="#f8fafc" font-size="11" font-weight="800">${c.val}${c.unit}</text>
+              <text x="${c.x.toFixed(1)}" y="${H - 5}" text-anchor="middle" fill="#94a3b8" font-size="10">${c.date}</text>
+            `).join('')}
+          </svg>
+        </div>
+      `;
+    }
+
+    function hipBadgeMeta(status) {
+      if (status === 'mild') return { label: 'Leve desconforto ⚠️', cls: 'badge-amber' };
+      if (status === 'discomfort') return { label: 'Dor/Limitou 🛑', cls: 'badge-red' };
+      return { label: 'Sem dor ✅', cls: 'badge-emerald' };
+    }
+
+    function examBadgeClass(status) {
+      if (status === 'atencao') return 'badge-amber';
+      if (status === 'otimo') return 'badge-emerald';
+      if (status === 'bom') return 'badge-cyan';
+      return 'badge-emerald';
+    }
+
+    function renderEvolucaoTab() {
+      const sortedBody = [...state.bodyLogs].sort((a, b) => a.date.localeCompare(b.date));
+      const latest = sortedBody[sortedBody.length - 1] || { weight: 73.95, bf: 37.5, muscleKg: 24.8, waterPct: 46.1 };
+      const imc = (Number(latest.weight) / (1.67 * 1.67)).toFixed(1).replace('.', ',');
+      const fatKg = latest.bf ? ((Number(latest.weight) * Number(latest.bf)) / 100).toFixed(1).replace('.', ',') : '27,7';
+
+      let hipOk = 0, hipMild = 0, hipDisc = 0;
+      state.workoutHistory.slice(0, 15).forEach(s => {
+        if (s.hipStatus === 'mild') hipMild++;
+        else if (s.hipStatus === 'discomfort') hipDisc++;
+        else hipOk++;
+      });
+
+      return `
+        <div class="stack anim-in">
+          <!-- Cards de Bioimpedância Atual -->
+          <section class="card stack-sm">
+            <div class="row-between" style="flex-wrap:wrap;">
+              <h2 class="h3">📏 Bioimpedância Atual — Monik (41a · 167 cm)</h2>
+              <span class="badge badge-rose">BMR 1.380 kcal/dia</span>
+            </div>
+            <div class="grid-4 tabular">
+              <div class="card-dark">
+                <div style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;">Peso / IMC</div>
+                <div style="font-size:17px;font-weight:900;color:#fff;margin-top:3px;">${Number(latest.weight).toFixed(2).replace('.', ',')} kg</div>
+                <div style="font-size:11px;color:#fcd34d;font-weight:700;">IMC ${imc}</div>
+              </div>
+              <div class="card-dark">
+                <div style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;">Gordura Corporal</div>
+                <div style="font-size:17px;font-weight:900;color:#fda4af;margin-top:3px;">${latest.bf ? Number(latest.bf).toFixed(1).replace('.', ',') + '%' : '37,5%'}</div>
+                <div style="font-size:11px;color:#94a3b8;">${fatKg} kg · Visceral 8,0 (Saudável)</div>
+              </div>
+              <div class="card-dark">
+                <div style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;">Músc. Esquelético</div>
+                <div style="font-size:17px;font-weight:900;color:#6ee7b7;margin-top:3px;">${latest.muscleKg ? Number(latest.muscleKg).toFixed(1).replace('.', ',') + ' kg' : '24,8 kg'}</div>
+                <div style="font-size:11px;color:#34d399;font-weight:700;">33,5% · Excelente</div>
+              </div>
+              <div class="card-dark">
+                <div style="font-size:10px;font-weight:800;color:#94a3b8;text-transform:uppercase;">Água Corporal</div>
+                <div style="font-size:17px;font-weight:900;color:#7dd3fc;margin-top:3px;">${latest.waterPct ? Number(latest.waterPct).toFixed(1).replace('.', ',') + '%' : '46,1%'}</div>
+                <div style="font-size:11px;color:#fcd34d;font-weight:700;">Baixo · Meta 2,6 L/dia</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Indicador de Saúde do Quadril Esquerdo -->
+          <section class="card stack-sm" style="border-color:var(--amber-border);">
+            <div class="row-between">
+              <h3 class="h3">🛡️ Saúde do Quadril Esquerdo (Últimos Treinos)</h3>
+              <span class="muted" style="font-size:11px;">${state.workoutHistory.length} sessão(ões)</span>
+            </div>
+            <div class="grid-3 tabular" style="text-align:center;">
+              <div class="card-dark" style="border-color:var(--emerald-border);">
+                <div style="font-size:20px;font-weight:900;color:#6ee7b7;">${hipOk}</div>
+                <div style="font-size:11px;font-weight:700;color:#a7f3d0;">Sem dor ✅</div>
+              </div>
+              <div class="card-dark" style="border-color:var(--amber-border);">
+                <div style="font-size:20px;font-weight:900;color:#fcd34d;">${hipMild}</div>
+                <div style="font-size:11px;font-weight:700;color:#fde68a;">Leve ⚠️</div>
+              </div>
+              <div class="card-dark" style="border-color:rgba(239,68,68,0.4);">
+                <div style="font-size:20px;font-weight:900;color:#fca5a5;">${hipDisc}</div>
+                <div style="font-size:11px;font-weight:700;color:#fecaca;">Dor 🛑</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Gráfico SVG de Cargas -->
+          <section class="card stack-sm">
+            <div class="row-between" style="flex-wrap:wrap;">
+              <h3 class="h3">📈 Evolução de Cargas por Máquina</h3>
+              <select id="chartExSel" class="input-box" style="width:auto;max-width:100%;min-height:42px;padding:8px 10px;font-size:12px;font-weight:700;color:#fda4af;">
+                ${ALL_EXERCISES.map(ex => `<option value="${ex.id}" ${ui.chartExId === ex.id ? 'selected' : ''}>${ex.workoutId} · ${escapeHtml(ex.name)}</option>`).join('')}
+              </select>
+            </div>
+            ${renderLoadChartSVG(ui.chartExId)}
+          </section>
+
+          <!-- Histórico Expansível de Treinos -->
+          <section class="card stack-sm">
+            <div class="row-between">
+              <h3 class="h3">🗂 Histórico de Treinos Salvos</h3>
+              <span class="muted" style="font-size:11px;">${state.workoutHistory.length} salvo(s)</span>
+            </div>
+
+            ${!state.workoutHistory.length ? `
+              <div class="card-dark" style="text-align:center;padding:20px;font-size:12px;color:#94a3b8;">
+                Nenhum treino finalizado ainda. Vá na aba <strong>Treino</strong> e inicie o <strong>Treino A</strong>!
+              </div>
+            ` : `
+              <div class="stack-sm">
+                ${state.workoutHistory.map(sess => {
+                  const exp = ui.expandedHistId === sess.id;
+                  const hb = hipBadgeMeta(sess.hipStatus);
+                  return `
+                    <div class="card-dark" style="padding:0;overflow:hidden;">
+                      <button type="button" data-exp-hist="${sess.id}" style="width:100%;min-height:54px;padding:12px 13px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                        <div style="min-width:0;">
+                          <div class="flex-wrap">
+                            <span class="badge badge-rose">${sess.workoutId}</span>
+                            <strong style="font-size:13px;color:#fff;">${sess.workoutName} · ${formatShortDateTime(sess.completedAt)}</strong>
+                          </div>
+                          <div class="flex-wrap tabular" style="margin-top:6px;font-size:11px;color:#94a3b8;">
+                            <span>⏱ ${formatMMSS(sess.durationSec)}</span>
+                            <span>· ${sess.totalSetsDone}/${sess.totalSetsPlanned} séries</span>
+                            <span style="color:#6ee7b7;font-weight:700;">· ${Number(sess.totalVolumeKg).toLocaleString('pt-BR')} kg</span>
+                            <span class="badge ${hb.cls}">${hb.label}</span>
+                          </div>
+                        </div>
+                        <span style="font-size:12px;color:#94a3b8;flex-shrink:0;">${exp ? '▲' : '▼'}</span>
+                      </button>
+
+                      ${exp ? `
+                        <div class="stack-sm anim-in" style="padding:10px 13px 13px;border-top:1px solid var(--border-soft);">
+                          ${sess.notes ? `<div style="font-size:12px;color:#fde68a;">📝 ${escapeHtml(sess.notes)}</div>` : ''}
+                          ${(sess.exercises || []).map(ex => {
+                            const str = ex.sets.filter(st => st.done).map((st, idx) => ex.isometria ? `S${idx + 1}: ${st.reps}s` : `S${idx + 1}: ${st.kg}kg×${st.reps}`).join(' | ') || 'Não feito';
+                            return `
+                              <div class="card-elev" style="padding:9px 11px;font-size:12px;">
+                                <div class="row-between">
+                                  <strong style="color:#fff;">${escapeHtml(ex.executedName)}</strong>
+                                  ${ex.usedSubstitute ? '<span class="badge badge-emerald">Substituta</span>' : ''}
+                                </div>
+                                <div class="tabular" style="font-size:11px;color:#fda4af;font-weight:700;margin-top:3px;">${str}</div>
+                              </div>
+                            `;
+                          }).join('')}
+                          <div class="row-between" style="padding-top:4px;">
+                            <button type="button" data-share-sess="${sess.id}" class="btn-outline-emerald" style="min-height:40px;font-size:11.5px;">📤 Compartilhar</button>
+                            <button type="button" data-del-sess="${sess.id}" style="min-height:40px;font-size:11.5px;font-weight:700;color:#fca5a5;padding:7px 10px;">🗑 Excluir</button>
+                          </div>
+                        </div>
+                      ` : ''}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `}
+          </section>
+
+          <!-- Diário Corporal Editável -->
+          <section class="card stack-sm">
+            <h3 class="h3">⚖️ Diário Corporal (Peso, % Gordura, Músculo &amp; Água)</h3>
+            <form id="bodyForm" class="card-dark stack-sm">
+              <div class="grid-4">
+                <div>
+                  <label class="field-label" for="bfDate">Data</label>
+                  <input id="bfDate" type="date" value="${getTodayKey()}" required class="input-box" style="padding:8px;" />
+                </div>
+                <div>
+                  <label class="field-label" for="bfWeight">Peso (kg)</label>
+                  <input id="bfWeight" type="number" step="0.05" inputmode="decimal" placeholder="73.95" required class="input-box tabular" style="padding:8px;" />
+                </div>
+                <div>
+                  <label class="field-label" for="bfFat">% Gordura</label>
+                  <input id="bfFat" type="number" step="0.1" inputmode="decimal" placeholder="37.5" class="input-box tabular" style="padding:8px;" />
+                </div>
+                <div>
+                  <label class="field-label" for="bfWater">% Água</label>
+                  <input id="bfWater" type="number" step="0.1" inputmode="decimal" placeholder="46.1" class="input-box tabular" style="padding:8px;" />
+                </div>
+              </div>
+              <div class="grid-2">
+                <input id="bfMuscle" type="number" step="0.1" inputmode="decimal" placeholder="Músculo Esq. kg (opc., ex: 24.8)" class="input-box tabular" />
+                <button type="submit" class="btn-emerald">+ Registrar Medição</button>
+              </div>
+            </form>
+
+            <div class="stack-sm">
+              ${[...sortedBody].reverse().map(b => `
+                <div class="card-dark row-between" style="padding:10px 12px;font-size:12px;">
+                  <div class="flex-wrap tabular">
+                    <strong style="color:#94a3b8;">${formatShortDate(b.date)}</strong>
+                    <strong style="color:#fff;">${Number(b.weight).toFixed(2).replace('.', ',')} kg</strong>
+                    ${b.bf ? `<span style="color:#fda4af;">${Number(b.bf).toFixed(1).replace('.', ',')}% GC</span>` : ''}
+                    ${b.muscleKg ? `<span style="color:#6ee7b7;">${Number(b.muscleKg).toFixed(1).replace('.', ',')} kg músc</span>` : ''}
+                    ${b.waterPct ? `<span style="color:#7dd3fc;">💧 ${Number(b.waterPct).toFixed(1).replace('.', ',')}%</span>` : ''}
+                  </div>
+                  ${sortedBody.length > 1 ? `<button type="button" data-del-body="${b.id}" style="min-width:36px;min-height:36px;color:#fca5a5;font-weight:800;">✕</button>` : '<span style="font-size:10px;color:#64748b;">Inicial</span>'}
+                </div>
+              `).join('')}
+            </div>
+          </section>
+
+          <!-- Painel Clínico Atualizado (Laboratório Clementino Fraga — 23/10/2026) -->
+          <section class="card stack-sm">
+            <div class="row-between" style="flex-wrap:wrap;">
+              <div>
+                <h3 class="h3">🩺 Painel Clínico Atualizado (23/10/2026)</h3>
+                <p class="muted" style="margin:2px 0 0;font-size:11px;">Laboratório Clementino Fraga · Evolução consolidada</p>
+              </div>
+              <span class="badge badge-emerald">Atualizado Out/2026</span>
+            </div>
+
+            <div class="grid-2">
+              ${LAB_RESULTS_OUT2026.map(ex => `
+                <div class="card-dark" style="border-color:${ex.status === 'atencao' ? 'var(--amber-border)' : 'var(--border)'};">
+                  <div class="row-between" style="margin-bottom:4px;">
+                    <strong style="font-size:12.5px;color:#fff;">${ex.name}</strong>
+                    <span class="badge ${examBadgeClass(ex.status)}">${ex.badge}</span>
+                  </div>
+                  <div class="tabular" style="font-size:14.5px;font-weight:900;color:${ex.status === 'atencao' ? '#fcd34d' : (ex.status === 'bom' ? '#7dd3fc' : '#6ee7b7')};">${ex.val}</div>
+                  <div style="font-size:10.5px;color:#94a3b8;margin-top:3px;line-height:1.4;">Ref: ${ex.ref} · ${ex.note}</div>
+                </div>
+              `).join('')}
+            </div>
+
+            <!-- Próxima Consulta Médica -->
+            <div class="clinical-banner stack-sm" style="margin-top:4px;">
+              <h4 class="h3" style="font-size:13.5px;color:#fcd34d;">📋 Próxima Consulta Médica (Dr. Lucas / Rotina)</h4>
+              <ul style="margin:0;padding-left:18px;font-size:12px;color:#fef3c7;line-height:1.52;">
+                <li><strong>Ferritina Sérica (221 ng/mL):</strong> discutir solicitação de <strong>Saturação de Transferrina (IST)</strong> e <strong>PCR</strong> para diferenciar reserva de ferro de componente inflamatório.</li>
+                <li><strong>Vitamina B12 (1.041 pg/mL):</strong> checar histórico de eventual suplementação prévia; manter sem suplementos de B12.</li>
+                <li><strong>Colesterol Total (210 mg/dL):</strong> avaliar dosagem direta de <strong>LDL</strong> e acompanhar resposta ao aumento de fibras solúveis (≥32g/dia) e musculação.</li>
+                <li><strong>Quadril esquerdo:</strong> relatar a evolução de conforto/desconforto registrada no histórico do app.</li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Backup & Compartilhamento -->
+          <section class="card stack-sm">
+            <h3 class="h3">💾 Backup &amp; Compartilhamento</h3>
+            <p class="muted" style="margin:0;">Os dados são preservados offline na chave <code>monik_fit_v1_state</code>. Exporte backups ou compartilhe um resumo no WhatsApp/Notas.</p>
+            <div class="grid-2">
+              <button type="button" id="btnShareSummary" class="btn-primary" style="min-height:46px;font-size:12.5px;">📤 Compartilhar Resumo</button>
+              <button type="button" id="btnExportCsv" class="btn-outline-emerald" style="font-size:12.5px;">📊 Exportar Treinos (.csv)</button>
+              <button type="button" id="btnExportJson" class="btn-secondary" style="font-size:12.5px;">⬇ Exportar Backup (.json)</button>
+              <button type="button" id="btnImportJson" class="btn-secondary" style="font-size:12.5px;">⬆ Importar Backup (.json)</button>
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    function bindEvolucaoEvents() {
+      document.getElementById('chartExSel')?.addEventListener('change', e => {
+        ui.chartExId = e.target.value; renderApp();
+      });
+
+      document.querySelectorAll('[data-exp-hist]').forEach(b => b.addEventListener('click', () => {
+        ui.expandedHistId = ui.expandedHistId === b.dataset.expHist ? null : b.dataset.expHist;
+        renderApp();
+      }));
+
+      document.querySelectorAll('[data-share-sess]').forEach(b => b.addEventListener('click', () => {
+        const s = state.workoutHistory.find(x => x.id === b.dataset.shareSess);
+        if (s) shareWorkout(s);
+      }));
+
+      document.querySelectorAll('[data-del-sess]').forEach(b => b.addEventListener('click', () => {
+        const id = b.dataset.delSess;
+        openModal({
+          title: 'Excluir sessão?',
+          bodyHtml: '<p class="muted" style="margin:0;">Remove permanentemente este treino do histórico.</p>',
+          confirmText: 'Excluir',
+          onConfirm: () => { state.workoutHistory = state.workoutHistory.filter(x => x.id !== id); persistState(); renderApp(); showToast('Sessão excluída.', 'info'); }
+        });
+      }));
+
+      document.getElementById('bodyForm')?.addEventListener('submit', e => {
+        e.preventDefault();
+        const date = document.getElementById('bfDate').value;
+        const weight = Number(document.getElementById('bfWeight').value);
+        const bf = document.getElementById('bfFat').value;
+        const water = document.getElementById('bfWater').value;
+        const muscle = document.getElementById('bfMuscle').value;
+        if (!date || !weight) return;
+        state.bodyLogs.push({
+          id: 'body_' + Date.now(),
+          date,
+          weight,
+          bf: bf ? Number(bf) : '',
+          muscleKg: muscle ? Number(muscle) : '',
+          waterPct: water ? Number(water) : '',
+          note: ''
+        });
+        persistState(); renderApp(); showToast('Nova medição corporal salva!', 'success');
+      });
+
+      document.querySelectorAll('[data-del-body]').forEach(b => b.addEventListener('click', () => {
+        state.bodyLogs = state.bodyLogs.filter(x => x.id !== b.dataset.delBody);
+        persistState(); renderApp();
+      }));
+
+      document.getElementById('btnShareSummary')?.addEventListener('click', shareFullSummary);
+      document.getElementById('btnExportCsv')?.addEventListener('click', exportCSV);
+      document.getElementById('btnExportJson')?.addEventListener('click', exportJSON);
+      document.getElementById('btnImportJson')?.addEventListener('click', () => document.getElementById('importJsonInput')?.click());
+    }
+
+    // ==================== COMPARTILHAR, CSV, JSON & MODAIS GUIA ====================
+    function copyFallback(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-9999px';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    async function shareOrCopy(title, text) {
+      if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+        try {
+          await navigator.share({ title, text });
+          showToast('Compartilhado com sucesso!', 'success');
+          return;
+        } catch (err) {
+          if (err && err.name === 'AbortError') return;
+        }
+      }
+      if (copyFallback(text)) showToast('Resumo copiado! Cole no WhatsApp ou Notas.', 'success');
+      else showToast('Não foi possível copiar automaticamente.', 'error');
+    }
+
+    function shareWorkout(s) {
+      const hb = hipBadgeMeta(s.hipStatus).label;
+      const lines = [
+        `🏋️ Monik Fit — ${s.workoutName} (${s.workoutFocus})`,
+        `📅 ${formatShortDateTime(s.completedAt)} | ⏱ ${formatMMSS(s.durationSec)}`,
+        `📊 ${s.totalSetsDone}/${s.totalSetsPlanned} séries | Volume: ${Number(s.totalVolumeKg).toLocaleString('pt-BR')} kg`,
+        `🛡️ Quadril Esq.: ${hb}`,
+        ''
+      ];
+      (s.exercises || []).forEach((ex, i) => {
+        const str = ex.sets.filter(st => st.done).map(st => ex.isometria ? `${st.reps}s` : `${st.kg}kg×${st.reps}`).join(', ') || 'pulado';
+        lines.push(`${i + 1}. ${ex.executedName}: ${str}`);
+      });
+      if (s.notes) lines.push(`\n📝 Obs: ${s.notes}`);
+      shareOrCopy(`Monik Fit — ${s.workoutName}`, lines.join('\n'));
+    }
+
+    function shareFullSummary() {
+      const log = getTodayDietLog();
+      const sortedBody = [...state.bodyLogs].sort((a, b) => a.date.localeCompare(b.date));
+      const latest = sortedBody[sortedBody.length - 1];
+      const mealsDone = MEALS.filter(m => log.mealsDone[m.id]).length;
+      const lines = [
+        `📋 Resumo Monik Fit (${formatShortDate(getTodayKey())})`,
+        `⚖️ Peso: ${Number(latest.weight).toFixed(2).replace('.', ',')} kg | Gordura: ${latest.bf || 37.5}% | Água: ${latest.waterPct || 46.1}%`,
+        `🥗 Dieta (${DIET_MODES[state.dietMode].title}): ${mealsDone}/4 refeições hoje`,
+        `💧 Água hoje: ${((Number(log.waterMl) || 0) / 1000).toFixed(2).replace('.', ',')} L / 2,60 L | 🚶 Passos: ${(log.steps || 0).toLocaleString('pt-BR')}`,
+        `🏋️ Treinos salvos: ${state.workoutHistory.length}`,
+        `🩺 Exames Out/2026: Ferritina 221 | B12 1041 | Col. Total 210 | HDL 60 | TG 51 | Vit D 51,9 | A1c 4,8%`,
+        ''
+      ];
+      state.workoutHistory.slice(0, 5).forEach(s => {
+        lines.push(`- ${s.workoutName} (${formatShortDate(s.completedAt)}) · ${formatMMSS(s.durationSec)} · ${hipBadgeMeta(s.hipStatus).label}`);
+      });
+      shareOrCopy('Resumo Monik Fit (Out/2026)', lines.join('\n'));
+    }
+
+    function exportCSV() {
+      try {
+        const rows = [['Data', 'Treino', 'Duracao_Seg', 'Quadril_Esquerdo', 'Exercicio_Executado', 'Substituto', 'Series_Feitas', 'Carga_Max_ou_Seg', 'Volume_kg']];
+        state.workoutHistory.forEach(s => {
+          (s.exercises || []).forEach(ex => {
+            const done = (ex.sets || []).filter(st => st.done);
+            const maxVal = done.length ? Math.max(...done.map(st => Number(ex.isometria ? st.reps : st.kg) || 0)) : 0;
+            const vol = ex.isometria ? 0 : done.reduce((a, st) => a + ((Number(st.kg) || 0) * (Number(st.reps) || 0)), 0);
+            rows.push([
+              s.completedAt,
+              s.workoutName,
+              s.durationSec,
+              s.hipStatus || 'ok',
+              `"${String(ex.executedName || '').replace(/"/g, '""')}"`,
+              ex.usedSubstitute ? 'Sim' : 'Nao',
+              done.length,
+              maxVal,
+              Math.round(vol)
+            ]);
+          });
+        });
+        const blob = new Blob(['\uFEFF' + rows.map(r => r.join(';')).join('\n')], { type: 'text/csv;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `monik-fit-treinos-${getTodayKey()}.csv`;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Planilha (.csv) exportada!', 'success');
+      } catch { showToast('Erro ao exportar CSV.', 'error'); }
+    }
+
+    function exportJSON() {
+      try {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `backup-monik-fit-${getTodayKey()}.json`;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Backup (.json) baixado!', 'success');
+      } catch { showToast('Erro ao exportar backup.', 'error'); }
+    }
+
+    function openHipProtocolModal() {
+      openModal({
+        title: '🛡️ Protocolo de Proteção — Quadril Esquerdo',
+        bodyHtml: `
+          <div class="stack-sm" style="font-size:12.5px;color:#e2e8f0;line-height:1.55;">
+            <div class="hip-alert-box">
+              <strong>Objetivo:</strong> ganhar massa magra e força nos membros inferiores mantendo <strong>zero dor aguda ou pinçamento</strong> na virilha/quadril esquerdo.
+            </div>
+            <div class="card-dark">
+              <strong style="color:#fda4af;">1. Regra dos ≤ 90° de flexão</strong>
+              <p class="muted" style="margin:4px 0 0;">No Leg Press Horizontal ou 45°, posicione os pés levemente mais altos, desça no máximo até 90° e nunca deixe a lombar descolar do encosto.</p>
+            </div>
+            <div class="card-dark">
+              <strong style="color:#6ee7b7;">2. Estabilização e Troca Rápida</strong>
+              <p class="muted" style="margin:4px 0 0;">A Cadeira Abdutora (tronco ereto) fortalece o glúteo médio para proteger a articulação. Na Cadeira Adutora, pare sempre antes de qualquer desconforto na virilha.</p>
+            </div>
+            <div class="card-dark">
+              <strong style="color:#fcd34d;">3. Cadência 2-1-2 &amp; RIR 2–3</strong>
+              <p class="muted" style="margin:4px 0 0;">Desça em 2s, pause 1s, suba em 2s e pare com 2 a 3 repetições na reserva. Ao final do treino, registre sempre o status do quadril esquerdo.</p>
+            </div>
+          </div>
+        `,
+        hideConfirm: true,
+        cancelText: 'Entendi'
+      });
+    }
+
+    function openSaveModal() {
+      openModal({
+        title: '📱 Salvar Monik Fit na Tela Inicial',
+        bodyHtml: `
+          <div class="stack-sm" style="font-size:12px;color:#e2e8f0;line-height:1.5;">
+            <div class="card-dark" style="border-color:var(--rose-border);">
+              <strong style="color:#fda4af;">🍎 iPhone (Safari) — Recomendado!</strong>
+              <ol style="margin:6px 0 0;padding-left:18px;">
+                <li>Renomeie este arquivo para <code>index.html</code> dentro de uma pasta e envie grátis em <strong>app.netlify.com/drop</strong> (ou Tiiny.host).</li>
+                <li>Abra o link <code>https://...</code> gerado no <strong>Safari</strong> do iPhone.</li>
+                <li>Toque no ícone <strong>Compartilhar</strong> (quadrado com seta ↑ na barra inferior).</li>
+                <li>Toque em <strong>Adicionar à Tela de Início</strong> → <strong>Adicionar</strong>.</li>
+                <li>Abre como app em tela cheia, mantém todo o histórico e permite ver vídeos dentro do próprio card!</li>
+              </ol>
+            </div>
+            <div class="card-dark" style="border-color:var(--cyan-border);">
+              <strong style="color:#7dd3fc;">🤖 Android (Chrome / Samsung)</strong>
+              <ol style="margin:6px 0 0;padding-left:18px;">
+                <li><strong>Via Link (melhor):</strong> abra o link hospedado no Chrome → menu <strong>⋮</strong> → <strong>Adicionar à tela inicial</strong>.</li>
+                <li><strong>Local offline (Samsung):</strong> abra <strong>Meus Arquivos</strong> → Downloads → segure o dedo sobre <code>monik_fit.html</code> → <strong>Mais (⋮)</strong> → <strong>Adicionar à tela inicial</strong>.</li>
+              </ol>
+            </div>
+            <p class="muted" style="margin:0;font-size:11px;">✨ Arquivo <strong>100% offline-ready</strong>: sem CDN externo, abre instantaneamente mesmo sem sinal na academia.</p>
+          </div>
+        `,
+        hideConfirm: true,
+        cancelText: 'Fechar'
+      });
+    }
+
+    // ==================== RENDERIZAÇÃO GLOBAL & BOOT ====================
+    function switchTab(tab) {
+      state.activeTab = tab;
+      persistState();
+      renderApp();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateNav() {
+      document.querySelectorAll('.nav-desk, .nav-mob').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === state.activeTab);
+      });
+    }
+
+    function renderApp() {
+      try {
+        updateNav();
+        const root = document.getElementById('appRoot');
+        if (!root) return;
+        if (state.activeTab === 'treino') {
+          root.innerHTML = renderTreinoTab();
+          bindTreinoEvents();
+        } else if (state.activeTab === 'dieta') {
+          root.innerHTML = renderDietaTab();
+          bindDietaEvents();
+        } else {
+          root.innerHTML = renderEvolucaoTab();
+          bindEvolucaoEvents();
+        }
+      } catch (err) {
+        console.error('Erro de renderização:', err);
+        const root = document.getElementById('appRoot');
+        if (root) root.innerHTML = `<div class="card" style="border-color:#ef4444;color:#fecaca;">Erro ao renderizar: ${escapeHtml(err.message)}</div>`;
+      }
+    }
+
+    function initApp() {
+      loadState();
+
+      document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.tab)));
+      document.getElementById('btnTopHip')?.addEventListener('click', openHipProtocolModal);
+      document.getElementById('btnTopSave')?.addEventListener('click', openSaveModal);
+
+      document.getElementById('btnTimerPlus15')?.addEventListener('click', () => {
+        ui.timerSec += 15;
+        const d = document.getElementById('floatTimerDisplay');
+        if (d) d.textContent = formatMMSS(ui.timerSec);
+      });
+      document.getElementById('btnTimerStop')?.addEventListener('click', stopFloatTimer);
+
+      document.getElementById('modalCloseX')?.addEventListener('click', closeModal);
+      document.getElementById('modalCancelBtn')?.addEventListener('click', closeModal);
+      document.getElementById('appModal')?.addEventListener('click', e => { if (e.target.id === 'appModal') closeModal(); });
+      document.getElementById('modalConfirmBtn')?.addEventListener('click', () => {
+        const cb = ui.modalConfirmCb;
+        closeModal();
+        if (typeof cb === 'function') cb();
+      });
+
+      document.getElementById('importJsonInput')?.addEventListener('change', e => {
+        const f = e.target.files?.[0];
+        if (!f) return;
+        const rd = new FileReader();
+        rd.onload = ev => {
+          try {
+            state = mergeStateSafely(JSON.parse(String(ev.target.result)));
+            persistState(); renderApp();
+            showToast('Backup restaurado com sucesso!', 'success');
+          } catch { showToast('Arquivo JSON inválido.', 'error'); }
+        };
+        rd.readAsText(f);
+        e.target.value = '';
+      });
+
+      if (state.activeSession && state.activeSession.running) ensureSessionTicker();
+      renderApp();
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initApp);
+    else initApp();
+  </script>
+</body>
+</html>

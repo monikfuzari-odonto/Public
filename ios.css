@@ -1,0 +1,45 @@
+/* Áreas seguras do iPhone (notch / Dynamic Island / barra de início) */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+/* O cabeçalho e o painel do treino em andamento passam a ficar presos no topo ao rolar
+   (o overflow-x: hidden do body impedia o position: sticky de funcionar) */
+body { overflow-x: clip; }
+
+header.app-header { padding-top: var(--sat); }
+body { padding-bottom: calc(92px + var(--sab)); padding-left: var(--sal); padding-right: var(--sar); }
+.mobile-nav { padding-left: calc(10px + var(--sal)); padding-right: calc(10px + var(--sar)); }
+.float-timer { bottom: calc(84px + var(--sab)); left: calc(12px + var(--sal)); right: calc(12px + var(--sar)); }
+.toast-wrap { top: calc(68px + var(--sat)); left: calc(12px + var(--sal)); right: calc(12px + var(--sar)); }
+.sticky-session { top: calc(63px + var(--sat)); }
+.modal-foot { padding-bottom: calc(12px + var(--sab)); }
+
+@media (min-width: 640px) {
+  body { padding-bottom: calc(32px + var(--sab)); }
+  .float-timer { left: auto; right: calc(24px + var(--sar)); bottom: calc(24px + var(--sab)); }
+  .modal-foot { padding-bottom: 12px; }
+}
+
+/* App já instalado na Tela de Início: o botão "Salvar" deixa de aparecer */
+html.is-installed #btnTopSave { display: none !important; }
+
+/* Dica "Adicionar à Tela de Início" (só no Safari, antes de instalar) */
+#iosInstallTip {
+  position: fixed; z-index: 45;
+  left: calc(12px + var(--sal)); right: calc(12px + var(--sar));
+  bottom: calc(84px + var(--sab));
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px;
+  background: #131c31; border: 1px solid rgba(244, 63, 94, 0.45); border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  color: #e2e8f0; font-size: 13px; line-height: 1.4;
+}
+#iosInstallTip strong { color: #fda4af; }
+#iosInstallTip button {
+  flex: none; margin-left: auto; width: 30px; height: 30px; border-radius: 10px;
+  border: 1px solid #23304d; background: #0b1120; color: #94a3b8; font-weight: 700; font-family: inherit;
+}
+@media (min-width: 640px) { #iosInstallTip { bottom: calc(24px + var(--sab)); max-width: 420px; left: auto; } }
